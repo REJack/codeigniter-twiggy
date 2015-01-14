@@ -12,8 +12,7 @@
 /**
  * Represents an extension call node.
  *
- * @package    twig
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Node_Expression_ExtensionReference extends Twig_Node_Expression
 {
@@ -25,7 +24,7 @@ class Twig_Node_Expression_ExtensionReference extends Twig_Node_Expression
     /**
      * Compiles the node to PHP.
      *
-     * @param Twig_Compiler A Twig_Compiler instance
+     * @param Twig_Compiler $compiler A Twig_Compiler instance
      */
     public function compile(Twig_Compiler $compiler)
     {

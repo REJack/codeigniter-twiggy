@@ -12,8 +12,7 @@
 /**
  * Represents a security policy which need to be enforced when sandbox mode is enabled.
  *
- * @package    twig
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Sandbox_SecurityPolicy implements Twig_Sandbox_SecurityPolicyInterface
 {
@@ -64,19 +63,19 @@ class Twig_Sandbox_SecurityPolicy implements Twig_Sandbox_SecurityPolicyInterfac
     {
         foreach ($tags as $tag) {
             if (!in_array($tag, $this->allowedTags)) {
-                throw new Twig_Sandbox_SecurityError(sprintf('Tag "%s" is not allowed.', $tag));
+                throw new Twig_Sandbox_SecurityNotAllowedTagError(sprintf('Tag "%s" is not allowed.', $tag), $tag);
             }
         }
 
         foreach ($filters as $filter) {
             if (!in_array($filter, $this->allowedFilters)) {
-                throw new Twig_Sandbox_SecurityError(sprintf('Filter "%s" is not allowed.', $filter));
+                throw new Twig_Sandbox_SecurityNotAllowedFilterError(sprintf('Filter "%s" is not allowed.', $filter), $filter);
             }
         }
 
         foreach ($functions as $function) {
             if (!in_array($function, $this->allowedFunctions)) {
-                throw new Twig_Sandbox_SecurityError(sprintf('Function "%s" is not allowed.', $function));
+                throw new Twig_Sandbox_SecurityNotAllowedFunctionError(sprintf('Function "%s" is not allowed.', $function), $function);
             }
         }
     }

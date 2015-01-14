@@ -13,8 +13,7 @@
 /**
  * Represents a for node.
  *
- * @package    twig
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Node_For extends Twig_Node
 {
@@ -34,7 +33,7 @@ class Twig_Node_For extends Twig_Node
     /**
      * Compiles the node to PHP.
      *
-     * @param Twig_Compiler A Twig_Compiler instance
+     * @param Twig_Compiler $compiler A Twig_Compiler instance
      */
     public function compile(Twig_Compiler $compiler)
     {
@@ -108,6 +107,6 @@ class Twig_Node_For extends Twig_Node
         $compiler->write('unset($context[\'_seq\'], $context[\'_iterated\'], $context[\''.$this->getNode('key_target')->getAttribute('name').'\'], $context[\''.$this->getNode('value_target')->getAttribute('name').'\'], $context[\'_parent\'], $context[\'loop\']);'."\n");
 
         // keep the values set in the inner context for variables defined in the outer context
-        $compiler->write("\$context = array_merge(\$_parent, array_intersect_key(\$context, \$_parent));\n");
+        $compiler->write("\$context = array_intersect_key(\$context, \$_parent) + \$_parent;\n");
     }
 }

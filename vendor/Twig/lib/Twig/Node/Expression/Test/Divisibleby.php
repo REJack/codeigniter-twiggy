@@ -13,11 +13,10 @@
  * Checks if a variable is divisible by a number.
  *
  * <pre>
- *  {% if loop.index is divisibleby(3) %}
+ *  {% if loop.index is divisible by(3) %}
  * </pre>
  *
- * @package twig
- * @author  Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Node_Expression_Test_Divisibleby extends Twig_Node_Expression_Test
 {

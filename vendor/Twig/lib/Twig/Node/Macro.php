@@ -12,8 +12,7 @@
 /**
  * Represents a macro node.
  *
- * @package    twig
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Node_Macro extends Twig_Node
 {
@@ -25,18 +24,31 @@ class Twig_Node_Macro extends Twig_Node
     /**
      * Compiles the node to PHP.
      *
-     * @param Twig_Compiler A Twig_Compiler instance
+     * @param Twig_Compiler $compiler A Twig_Compiler instance
      */
     public function compile(Twig_Compiler $compiler)
     {
-        $arguments = array();
-        foreach ($this->getNode('arguments') as $argument) {
-            $arguments[] = '$'.$argument->getAttribute('name').' = null';
+        $compiler
+            ->addDebugInfo($this)
+            ->write(sprintf("public function get%s(", $this->getAttribute('name')))
+        ;
+
+        $count = count($this->getNode('arguments'));
+        $pos = 0;
+        foreach ($this->getNode('arguments') as $name => $default) {
+            $compiler
+                ->raw('$__'.$name.'__ = ')
+                ->subcompile($default)
+            ;
+
+            if (++$pos < $count) {
+                $compiler->raw(', ');
+            }
         }
 
         $compiler
-            ->addDebugInfo($this)
-            ->write(sprintf("public function get%s(%s)\n", $this->getAttribute('name'), implode(', ', $arguments)), "{\n")
+            ->raw(")\n")
+            ->write("{\n")
             ->indent()
         ;
 
@@ -44,15 +56,15 @@ class Twig_Node_Macro extends Twig_Node
             $compiler->write("\$context = \$this->env->getGlobals();\n\n");
         } else {
             $compiler
-                ->write("\$context = array_merge(\$this->env->getGlobals(), array(\n")
+                ->write("\$context = \$this->env->mergeGlobals(array(\n")
                 ->indent()
             ;
 
-            foreach ($this->getNode('arguments') as $argument) {
+            foreach ($this->getNode('arguments') as $name => $default) {
                 $compiler
                     ->write('')
-                    ->string($argument->getAttribute('name'))
-                    ->raw(' => $'.$argument->getAttribute('name'))
+                    ->string($name)
+                    ->raw(' => $__'.$name.'__')
                     ->raw(",\n")
                 ;
             }
@@ -70,13 +82,13 @@ class Twig_Node_Macro extends Twig_Node
             ->indent()
             ->subcompile($this->getNode('body'))
             ->outdent()
-            ->write("} catch(Exception \$e) {\n")
+            ->write("} catch (Exception \$e) {\n")
             ->indent()
             ->write("ob_end_clean();\n\n")
             ->write("throw \$e;\n")
             ->outdent()
             ->write("}\n\n")
-            ->write("return ob_get_clean();\n")
+            ->write("return ('' === \$tmp = ob_get_clean()) ? '' : new Twig_Markup(\$tmp, \$this->env->getCharset());\n")
             ->outdent()
             ->write("}\n\n")
         ;
