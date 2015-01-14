@@ -467,15 +467,23 @@ class Twiggy
 			// Only if the current page is served from a module do we need to add extra template locations.
 			if(!empty($this->_module))
 			{
-				$module_locations = Modules::$locations;
-
+				if (!class_exists('Modules')) {
+					$module_locations = $this->CI->config->item('modules_locations');
+				}else{
+					$module_locations = Modules::$locations;
+				}
 				foreach($module_locations as $loc => $offset)
 				{
 					/* Only add the template location if the same exists, otherwise
 					you'll need always a directory for your templates, even your module
 					won't use templates */
-					if ( is_dir($loc . $this->_module . '/' . $this->_config['themes_base_dir'] . $theme) )
-						$this->_template_locations[] = $loc . $this->_module . '/' . $this->_config['themes_base_dir'] . $theme;
+					if (!class_exists('Modules')) {
+						if ( is_dir($offset . $this->_module . '/' . $this->_config['themes_base_dir'] . $theme) )
+							$this->_template_locations[] = $offset . $this->_module . '/' . $this->_config['themes_base_dir'] . $theme;
+					}else{
+						if ( is_dir($loc . $this->_module . '/' . $this->_config['themes_base_dir'] . $theme) )
+							$this->_template_locations[] = $loc . $this->_module . '/' . $this->_config['themes_base_dir'] . $theme;
+					}
 				}
 			}
 		}
