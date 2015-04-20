@@ -26,8 +26,6 @@
 
         </div>
 
-        <a class="donate" href="#donate">Donate</a>
-
         <div class="clear"></div>
 
         <div class="description">
@@ -40,13 +38,13 @@
 
         <br><br>
 
-        <a href="http://getsparks.org/packages/Twiggy/versions/HEAD/show" class="block-link">Twiggy Spark</a>
+        <a href="https://github.com/REJack/codeigniter-twiggy/releases" class="block-link">GitHub releases</a>
 
         <a href="http://twig.sensiolabs.org" class="block-link">Official Twig Website</a>
 
         <br><br><br>
 
-        <p>Current version: <span class="tagged">0.8.5</span></p>
+        <p>Current version: <span class="tagged">0.9.0</span></p>
 
       </div> <!-- #introduction END -->
 
@@ -88,8 +86,8 @@
 
     <ul>
 
-      <li>PHP 5.2.4+</li>
-      <li>CodeIgniter 2.x</li>
+      <li>PHP 5.4+</li>
+      <li>CodeIgniter 3.0</li>
 
     </ul>
 
@@ -97,11 +95,9 @@
 
     <h2>How to install</h2>
 
-    <p>The installation is a piece of cake! All you need to do is to have sparks installed and run the following in the command line:</p>
-
-    <pre>php tools\spark install -vx.x.x Twiggy</pre>
-
-    <p>where x.x.x is the version of Twiggy you want to install.</p>
+    <p>The installation is a piece of cake! All you need to do is to download a GitHub release and place the files in your CodeIgniter application folder.</p>
+    <p>At least add twiggy in the autoload library array. Like this: </p>
+    <pre>$autoload['libraries'] = array('twiggy');</pre>
 
   </section>
 
@@ -511,14 +507,7 @@ $this->twiggy->unset_meta('keywords', 'description');</pre>
   <section id="about" class="container centered spaced">
 
     <h1>About</h1>
-
-    <p>The author of Twiggy is <a href="http://edmundask.lt">Edmundas Kondrašovas</a>. However, he does not claim every piece of code as his own. Credit also goes to the authors of <a href="http://twig-project.org">Twig</a>.</p>
-
-    <h2 id="donate">Donate</h2>
-
-    <p>Twiggy is absolutely free of use and does not cost anything. But if you want, you can support the author by making a donation. See the details below.</p>
-
-    <p><a href='http://www.pledgie.com/campaigns/16940'><img alt='Click here to lend your support to: codeigniter-twiggy and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/16940.png?skin_name=chrome' border='0' /></a></p>
+    <p>The author of this Twiggy Fork is REJack. The orignal author of Twiggy is <a href="http://edmundask.lt">Edmundas Kondrašovas</a>. However, he does not claim every piece of code as his own. Credit also goes to the authors of <a href="http://twig-project.org">Twig</a>.</p>
 
   </section>
 
