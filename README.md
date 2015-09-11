@@ -25,7 +25,7 @@ What is even more interesting, this does not replace CodeIgniter's default Views
 
 	```
     +-{APPPATH}/
-    | +-themes/
+    | +-views/
     | | +-default/
     | | | +-_layouts/
 	```
@@ -73,7 +73,7 @@ What is even more interesting, this does not replace CodeIgniter's default Views
 
 	```
     +-{APPPATH}/
-    | +-themes/
+    | +-views/
     | | +-default/
     | | | +-_layouts/
     | | | | +-index.hml.twig
