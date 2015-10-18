@@ -8,5 +8,4 @@
  */
 
 $autoload['libraries'] = array('twiggy');
-$autoload['config'] = array('twiggy');
 $autoload['helper'] = array();
