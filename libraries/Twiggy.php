@@ -51,6 +51,7 @@ class Twiggy
 
 		$this->CI =& get_instance();
 
+		$this->CI->load->config('twiggy');
 		$this->_config = $this->CI->config->item('twiggy');
 
 		$this->_themes_base_dir = ($this->_config['include_apppath']) ? APPPATH . $this->_config['themes_base_dir'] : $this->_config['themes_base_dir'];
