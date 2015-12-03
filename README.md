@@ -51,6 +51,13 @@ include_once './vendor/autoload.php';
     │   ├── libraries/
     │       └── Twiggy.php             - The twiggy library
 
+
+(Optional) You can include the twiggy library in your autoload file:
+
+```
+$autoload['libraries'] = array('twiggy');
+```
+
 ## 3. Set up dir structure
 
 1. Create a directory structure:
