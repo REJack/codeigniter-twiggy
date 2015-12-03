@@ -1,6 +1,6 @@
 # Twiggy - Twig template engine implementation for CodeIgniter
 
-Twiggy is not just a simple implementation of Twig template engine for CodeIgniter. It supports themes, layouts, templates for regular apps and also for apps that use HMVC (module support).
+Twiggy is not just a simple implementation of [Twig template engine](http://twig.sensiolabs.org/) for CodeIgniter. It supports themes, layouts, templates for regular apps and also for apps that use HMVC (module support).
 It is supposed to make life easier for developing and maitaining CodeIgniter applications where themes and nicely structured templates are necessary.
 
 ## Why Should I Care?
