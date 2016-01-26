@@ -9,8 +9,8 @@ Twig by itself is a very powerful and flexible templating system but with CodeIg
 What is even more interesting, this does not replace CodeIgniter's default Views, so you can still load views as such: `$this->load->view()`.
 
 ## Disclaimer
-This is project is a fork from: [REJack/codeigniter-twiggy](https://github.com/REJack/codeigniter-twiggy) which is also a fork from the original project:  [edmundask/codeigniter-twiggy]( https://github.com/edmundask/codeigniter-twiggy).
-
+This is project is a fork from:  [edmundask/codeigniter-twiggy]( https://github.com/edmundask/codeigniter-twiggy).
+With
 This fork is aimed to add additional functions to the original project which is no longer actively maintained by the original author.
 
 **Note:** This only works with [composer](https://getcomposer.org/), thats because I like composer :)
