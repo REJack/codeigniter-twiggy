@@ -10,7 +10,9 @@ What is even more interesting, this does not replace CodeIgniter's default Views
 
 ## Disclaimer
 This is project is a fork from:  [edmundask/codeigniter-twiggy]( https://github.com/edmundask/codeigniter-twiggy).
-With
+
+With changes from me (REJack) and [carloscarcamo](https://github.com/carloscarcamo)
+
 This fork is aimed to add additional functions to the original project which is no longer actively maintained by the original author.
 
 **Note:** This only works with [composer](https://getcomposer.org/), thats because I like composer :)
