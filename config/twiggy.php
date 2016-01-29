@@ -18,6 +18,24 @@
 
 /*
 |--------------------------------------------------------------------------
+| Load Twig without Composer
+|--------------------------------------------------------------------------
+|
+| This lets you activate that Twiggy loads the Twig engine instead of
+| composers autoload. 
+| 1. Create a new folder 'vendors' in 'application'.
+| 2. Download Twig from http://twig.sensiolabs.org/. 
+| (Click on the version number after 'Stable:' like '1.24.0'.)
+| 3. Extract the downloaded .tgz file.
+| 4. Copy the 'Twig' folder from the 'Twig-X.XX.X/lib/' folder into the 
+| 'vendors' folder.
+|
+*/
+
+$config['twiggy']['load_twig_engine'] = false;
+
+/*
+|--------------------------------------------------------------------------
 | Template file extension
 |--------------------------------------------------------------------------
 |

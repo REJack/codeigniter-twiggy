@@ -18,8 +18,6 @@
 
 if(!defined('TWIGGY_ROOT')) define('TWIGGY_ROOT', dirname(dirname(__FILE__)));
 
-Twig_Autoloader::register();
-
 class Twiggy
 {
     private $CI;
@@ -50,6 +48,12 @@ class Twiggy
 
         $this->CI->load->config('twiggy');
         $this->_config = $this->CI->config->item('twiggy');
+
+        if ( $this->_config['load_twig_engine'] == true ){
+            require_once(TWIGGY_ROOT . '/vendors/Twig/Autoloader.php');
+        }
+
+        Twig_Autoloader::register();
 
         $this->_themes_base_dir = ($this->_config['include_apppath']) ? APPPATH . $this->_config['themes_base_dir'] : $this->_config['themes_base_dir'];
         $this->_set_template_locations($this->_config['default_theme']);
