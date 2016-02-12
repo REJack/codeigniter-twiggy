@@ -15,12 +15,12 @@ With changes from me (REJack) and [carloscarcamo](https://github.com/carloscarca
 
 This fork is aimed to add additional functions to the original project which is no longer actively maintained by the original author.
 
-**Note:** This only works with [composer](https://getcomposer.org/), thats because I like composer :)
-
 # Requirements
 
 * PHP 5.2.4+
-* [CodeIgniter](http://codeigniter.com/) 2.x
+* [CodeIgniter](http://codeigniter.com/) 2.x & 3.x
+
+## Optional
 * [Composer](https://getcomposer.org/)
 
 # How To Use It
@@ -142,7 +142,34 @@ There is much more cool stuff that you should check out by visiting the [wiki](h
 
 # CHANGELOG
 
-### 0.8.5
+### 0.9.1
+* Added non-composer support
+ * Moved `Twig_Autoloader::register();` into the library `__construct`.
+ * Added `load_twig_engine` to config.
+ * Added `old_way` to `load_twig_engine` (for easy moving from `edmundask/codeigniter-twiggy`)
+
+### 0.9.0 (changes from [carloscarcamo](https://github.com/carloscarcamo))
+
+* Removed load config in the autoload files
+* Added config autoload in the library
+* Added Auto-reigster globals config array 
+* Removed twig. (now any user need to add twig manual over `composer`)
+
+### 0.8.7
+
+* Changed default `themes_base_dir` to `views/`.
+* Added CodeIgniter's Welcome Controller/View as a little example  
+* Updated vendor Twig to 1.22.1.
+
+### 0.8.6
+
+* Added support for HMVC from jenssegers.
+* Added `array_reverse` for `_template_locations`.
+* Updated Twig from 1.6.1 to 1.17.
+* Fixed the "`Unable to add function "*" as extensions have already been initialized. `"-error.
+
+
+### 0.8.5 (last changes from Edmundas Kondrašovas)
 
 * Changed `display()` and `render()` methods a little bit to accept a parameter. From now on you can set the template file without the `template()` method. For example: `$this->twiggy->display('admin/dashboard');` instead of `$this->twiggy->template('admin/dashboard')->display()`.
 * Added `rendered()` method to check whether a template has already been rendered/displayed using `display()` or `render()`.
