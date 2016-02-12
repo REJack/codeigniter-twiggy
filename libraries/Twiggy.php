@@ -49,9 +49,11 @@ class Twiggy
         $this->CI->load->config('twiggy');
         $this->_config = $this->CI->config->item('twiggy');
 
-        if ( $this->_config['load_twig_engine'] == true ){
-            require_once(TWIGGY_ROOT . '/vendors/Twig/Autoloader.php');
-        }
+        if($this->_config['load_twig_engine'] == "old_way"){
+            require_once(TWIGGY_ROOT . '/vendor/Twig/lib/Twig/Autoloader.php');
+        } else if ( $this->_config['load_twig_engine'] == true ){
+            require_once(TWIGGY_ROOT . '/vendor/Twig/Autoloader.php');
+        } 
 
         Twig_Autoloader::register();
 
