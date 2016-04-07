@@ -30,7 +30,7 @@
 | 4. Copy the 'Twig' folder from the 'Twig-X.XX.X/lib/' folder into the 
 | 'vendors' folder.
 |
-| Options: 'TRUE', 'old_way', 'FALSE'
+| Options: TRUE, 'old_way', FALSE
 | (old_way is for easy moving from edmundask/codeigniter-twiggy)
 |
 */
