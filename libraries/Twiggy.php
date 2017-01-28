@@ -12,7 +12,7 @@
  * @category  			Libraries
  * @author    			Edmundas Kondrašovas <as@edmundask.lt>
  * @license   			http://www.opensource.org/licenses/MIT
- * @version   			0.9.2
+ * @version   			0.9.3
  * @copyright 			Copyright (c) 2012 Edmundas Kondrašovas <as@edmundask.lt>
  */
 
@@ -34,6 +34,7 @@ class Twiggy
     private $_twig_loader;
     private $_module;
     private $_meta = array();
+    private $_asset = array();
     private $_rendered = FALSE;
 
     /**
@@ -99,6 +100,7 @@ class Twiggy
 
         $this->_globals['title'] = NULL;
         $this->_globals['meta'] = NULL;
+        $this->_globals['asset'] = NULL;
     }
 
     /**
@@ -280,6 +282,52 @@ class Twiggy
         return $this;
     }
 
+
+    /**
+     * Set asset data
+     *
+     * @access  public
+     * @param   string  type
+     * @param   string  name
+     * @param   string  value
+     * @param   string  (optional) extra array
+     * @return  object  instance of this class
+     */
+
+    public function asset($type, $name, $value, $extra=array())
+    {
+        $this->_asset[$name] = array('type' => $type, 'value' => $value, 'extra' => $extra);
+
+        return $this;
+    }
+
+    /**
+     * Unset asset data
+     *
+     * @access  public
+     * @param   string  (optional) name of the asset tag
+     * @return  object  instance of this class
+     */
+
+    public function unset_asset()
+    {
+        if(func_num_args() > 0)
+        {
+            $args = func_get_args();
+
+            foreach($args as $arg)
+            {
+                if(array_key_exists($arg, $this->_asset)) unset($this->_asset[$arg]);
+            }
+        }
+        else
+        {
+            $this->_asset = array();
+        }
+
+        return $this;
+    }
+
     /**
      * Register a function in Twig environment
      *
@@ -383,6 +431,25 @@ class Twiggy
     }
 
     /**
+     * Compile asset data into pure HTML
+     *
+     * @access  private
+     * @return  string  HTML
+     */
+
+    private function _compile_assetdata()
+    {
+        $html = '';
+
+        foreach($this->_asset as $asset)
+        {
+            $html .= $this->_asset_to_html($asset);
+        }
+
+        return $html;
+    }
+
+    /**
      * Convert meta tag array to HTML code
      *
      * @access	private
@@ -396,6 +463,67 @@ class Twiggy
     }
 
     /**
+     * Convert asset item array to HTML code
+     *
+     * @access  private
+     * @param   array   asset item
+     * @return  string  HTML code
+     */
+
+    private function _asset_to_html($asset)
+    {
+        if($asset['type'] == 'script'){
+            $extra = '';
+            if(isset($asset['extra'])){
+                if(isset($asset['extra']['charset'])){
+                    $extra .= ' charset="'.$asset['extra']['charset'].'"';
+                }
+                if(isset($asset['extra']['async'])){
+                    $extra .= ' async';
+                }
+                if(isset($asset['extra']['defer'])){
+                    $extra .= ' defer="'.$asset['extra']['defer'].'"';
+                }
+                if(isset($asset['extra']['type'])){
+                    $extra .= ' type="'.$asset['extra']['type'].'"';
+                } else {
+                    $extra .= ' type="text/javascript"';
+                }
+            }
+            return '<script src="'.$asset['value'].'"'.$extra.'></script>'."\n";        
+        } else if ($asset['type'] == 'link'){
+            $extra = '';
+            if(isset($asset['extra'])){
+                if(isset($asset['extra']['crossorigin'])){
+                    $extra .= ' crossorigin="'.$asset['extra']['crossorigin'].'"';
+                }
+                if(isset($asset['extra']['hreflang'])){
+                    $extra .= ' hreflang="'.$asset['extra']['hreflang'].'"';
+                }
+                if(isset($asset['extra']['media'])){
+                    $extra .= ' media="'.$asset['extra']['media'].'"';
+                }
+                if(isset($asset['extra']['rel'])){
+                    $extra .= ' rel="'.$asset['extra']['tyrelpe'].'"';
+                } else {
+                    $extra .= ' rel="stylesheet"';
+                }
+                if(isset($asset['extra']['sizes'])){
+                    $extra .= ' sizes="'.$asset['extra']['sizes'].'"';
+                }
+                if(isset($asset['extra']['type'])){
+                    $extra .= ' type="'.$asset['extra']['type'].'"';
+                } else {
+                    $extra .= ' type="text/css"';
+                }
+            }
+            return '<link href="'.$asset['value'].'"'.$extra.'>'."\n";        
+        }
+
+        return;
+    }
+
+    /**
      * Load template and return output object
      *
      * @access	private
@@ -405,6 +533,7 @@ class Twiggy
     private function _load()
     {
         $this->set('meta', $this->_compile_metadata(), TRUE);
+        $this->set('asset', $this->_compile_assetdata(), TRUE);
         $this->_rendered = TRUE;
 
         return $this->_twig->loadTemplate($this->_template . $this->_config['template_file_ext']);
@@ -563,6 +692,32 @@ class Twiggy
             if(array_key_exists($name, $this->_meta))
             {
                 return ($compile) ? $this->_meta_to_html($this->_meta[$name]) : $this->_meta[$name];
+            }
+
+            return FALSE;
+        }
+    }
+
+    /**
+    * Get assetdata
+    *
+    * @access   public
+    * @param    string  (optional) name of the asset item
+    * @param    boolean whether to compile to html
+    * @return   mixed   array of tag(s), string (HTML) or FALSE
+    */
+
+    public function get_asset($name = '', $compile = FALSE)
+    {
+        if(empty($name))
+        {
+            return ($compile) ? $this->_compile_assetdata() : $this->_asset;
+        }
+        else
+        {
+            if(array_key_exists($name, $this->_asset))
+            {
+                return ($compile) ? $this->_asset_to_html($this->_asset[$name]) : $this->_asset[$name];
             }
 
             return FALSE;
