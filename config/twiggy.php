@@ -1,4 +1,5 @@
-<?php  if(!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Twiggy - Twig template engine implementation for CodeIgniter
@@ -9,12 +10,106 @@
  *
  * @package   			CodeIgniter
  * @subpackage			Twiggy
- * @category  			Config
- * @author    			Edmundas Kondrašovas <as@edmundask.lt>
+ * @author    			(Original Author) Edmundas Kondrašovas <as@edmundask.lt>
+ * @author    			Raphael "REJack" Jackstadt <info@rejack.de>
  * @license   			http://www.opensource.org/licenses/MIT
- * @version   			0.9.3
- * @copyright 			Copyright (c) 2012 Edmundas Kondrašovas <as@edmundask.lt>
+ * @version   			0.9.4
+ * @copyright 			Copyright (c) 2012-2014 Edmundas Kondrašovas <as@edmundask.lt>
+ * @copyright 			Copyright (c) 2015-2017 Raphael "REJack" Jackstadt <info@rejack.de>
  */
+
+/*
+|--------------------------------------------------------------------------
+| Global meta array
+|--------------------------------------------------------------------------
+*/
+
+$config['twiggy']['global_meta'] = array
+(
+
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Global asset array
+|--------------------------------------------------------------------------
+*/
+
+$config['twiggy']['global_asset'] = array
+(
+
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Title separator
+|--------------------------------------------------------------------------
+|
+| Lets you specify the separator used in separating sections of the title
+| variable.
+|
+*/
+
+$config['twiggy']['title_separator'] = ' | ';
+
+
+/*
+|--------------------------------------------------------------------------
+| Auto-reigster functions
+|--------------------------------------------------------------------------
+|
+| Here you can list all the functions that you want Twiggy to automatically
+| register them for you.
+|
+| NOTE: only registered functions can be used in Twig templates.
+|
+*/
+
+$config['twiggy']['register_functions'] = array
+(
+
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Auto-reigster filters
+|--------------------------------------------------------------------------
+|
+| Much like with functions, list filters that you want Twiggy to
+| automatically register them for you.
+|
+| NOTE: only registered filters can be used in Twig templates. Also, keep
+| in mind that a filter is nothing more than just a regular function that
+| acceps a string (value) as a parameter and outputs a modified/new string.
+|
+*/
+
+$config['twiggy']['register_filters'] = array
+(
+
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Auto-reigster globals
+|--------------------------------------------------------------------------
+|
+| Register global variables, these will be available in all templates and macros.
+|
+| Example:
+| "foo" => "hello"
+|
+*/
+
+$config['twiggy']['register_globals'] = array
+(
+
+);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -36,20 +131,6 @@
 */
 
 $config['twiggy']['load_twig_engine'] = false;
-
-/*
-|--------------------------------------------------------------------------
-| Template file extension
-|--------------------------------------------------------------------------
-|
-| This lets you define the extension for template files. It doesn't affect
-| how Twiggy deals with templates but this may help you if you want to
-| distinguish different kinds of templates. For example, for CodeIgniter
-| you may use *.html.twig template files and *.html.jst for js templates.
-|
-*/
-
-$config['twiggy']['template_file_ext'] = '.html.twig';
 
 
 /*
@@ -110,6 +191,21 @@ $config['twiggy']['environment']['auto_reload']        	= NULL;
 $config['twiggy']['environment']['strict_variables']   	= FALSE;
 $config['twiggy']['environment']['autoescape']         	= FALSE;
 $config['twiggy']['environment']['optimizations']      	= -1;
+
+
+/*
+|--------------------------------------------------------------------------
+| Template file extension
+|--------------------------------------------------------------------------
+|
+| This lets you define the extension for template files. It doesn't affect
+| how Twiggy deals with templates but this may help you if you want to
+| distinguish different kinds of templates. For example, for CodeIgniter
+| you may use *.html.twig template files and *.html.jst for js templates.
+|
+*/
+
+$config['twiggy']['template_file_ext'] = '.html.twig';
 
 
 /*
@@ -197,70 +293,3 @@ $config['twiggy']['default_layout'] = 'index';
 */
 
 $config['twiggy']['default_template'] = 'index';
-
-
-/*
-|--------------------------------------------------------------------------
-| Auto-reigster functions
-|--------------------------------------------------------------------------
-|
-| Here you can list all the functions that you want Twiggy to automatically
-| register them for you.
-|
-| NOTE: only registered functions can be used in Twig templates.
-|
-*/
-
-$config['twiggy']['register_functions'] = array
-(
-
-);
-
-
-/*
-|--------------------------------------------------------------------------
-| Auto-reigster filters
-|--------------------------------------------------------------------------
-|
-| Much like with functions, list filters that you want Twiggy to
-| automatically register them for you.
-|
-| NOTE: only registered filters can be used in Twig templates. Also, keep
-| in mind that a filter is nothing more than just a regular function that
-| acceps a string (value) as a parameter and outputs a modified/new string.
-|
-*/
-
-$config['twiggy']['register_filters'] = array
-(
-
-);
-
-/*
-|--------------------------------------------------------------------------
-| Auto-reigster globals
-|--------------------------------------------------------------------------
-|
-| Register global variables, these will be available in all templates and macros.
-|
-| Example:
-| "foo" => "hello"
-|
-*/
-
-$config['twiggy']['register_globals'] = array
-(
-
-);
-
-/*
-|--------------------------------------------------------------------------
-| Title separator
-|--------------------------------------------------------------------------
-|
-| Lets you specify the separator used in separating sections of the title
-| variable.
-|
-*/
-
-$config['twiggy']['title_separator'] = ' | ';

@@ -1,4 +1,5 @@
-<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Twiggy - Twig template engine implementation for CodeIgniter
@@ -7,21 +8,21 @@
  * for CodeIgniter. It supports themes, layouts, templates for regular
  * apps and also for apps that use HMVC (module support).
  *
- * @package   			CodeIgniter
- * @subpackage			Twiggy
- * @category  			Libraries
- * @author    			Edmundas Kondrašovas <as@edmundask.lt>
- * @license   			http://www.opensource.org/licenses/MIT
- * @version   			0.9.3
- * @copyright 			Copyright (c) 2012 Edmundas Kondrašovas <as@edmundask.lt>
+ * @package             CodeIgniter
+ * @subpackage          Twiggy
+ * @author              (Original Author) Edmundas Kondrašovas <as@edmundask.lt>
+ * @author              Raphael "REJack" Jackstadt <info@rejack.de>
+ * @license             http://www.opensource.org/licenses/MIT
+ * @version             0.9.4
+ * @copyright           Copyright (c) 2012-2014 Edmundas Kondrašovas <as@edmundask.lt>
+ * @copyright           Copyright (c) 2015-2017 Raphael "REJack" Jackstadt <info@rejack.de>
  */
 
 if(!defined('TWIGGY_ROOT')) define('TWIGGY_ROOT', dirname(dirname(__FILE__)));
 
-class Twiggy
-{
-    private $CI;
+class Twiggy {
 
+    private $CII;
     private $_config = array();
     private $_template_locations = array();
     private $_data = array();
@@ -37,22 +38,21 @@ class Twiggy
     private $_asset = array();
     private $_rendered = FALSE;
 
-    /**
-    * Constructor
-    */
 
     public function __construct()
     {
         log_message('debug', 'Twiggy: library initialized');
 
-        $this->CI =& get_instance();
+        $this->CII =& get_instance();
+        $this->CII->load->config('twiggy');
+        $this->_config = $this->CII->config->item('twiggy');
 
-        $this->CI->load->config('twiggy');
-        $this->_config = $this->CI->config->item('twiggy');
-
-        if($this->_config['load_twig_engine'] === "old_way"){
+        if ($this->_config['load_twig_engine'] === "old_way")
+        {
             require_once(TWIGGY_ROOT . '/vendor/Twig/lib/Twig/Autoloader.php');
-        } else if ($this->_config['load_twig_engine'] === TRUE){
+        } 
+        else if ($this->_config['load_twig_engine'] === TRUE)
+        {
             require_once(TWIGGY_ROOT . '/vendor/Twig/Autoloader.php');
         } 
 
@@ -71,33 +71,26 @@ class Twiggy
             show_error($e->getRawMessage());
         }
 
-        // Decide whether to enable Twig cache. If it is set to be enabled, then set the path where cached files will be stored.
         $this->_config['environment']['cache'] = ($this->_config['environment']['cache']) ? $this->_config['twig_cache_dir'] : FALSE;
-
         $this->_twig = new Twig_Environment($this->_twig_loader, $this->_config['environment']);
 
-        // Initialize defaults
         $this->theme($this->_config['default_theme'])
              ->layout($this->_config['default_layout'])
              ->template($this->_config['default_template']);
 
-        // Auto-register functions, filters and globals.
         if(count($this->_config['register_functions']) > 0)
         {
             foreach($this->_config['register_functions'] as $function) $this->register_function($function);
         }
-
         if(count($this->_config['register_filters']) > 0)
         {
             foreach($this->_config['register_filters'] as $filter) $this->register_filter($filter);
         }
-
         if(count($this->_config['register_globals']) > 0){
             foreach($this->_config['register_globals'] as $k => $v) $this->set($k, $v, TRUE);
         }
 
         $this->_twig->setLexer(new Twig_Lexer($this->_twig, $this->_config['delimiters']));
-
         $this->_globals['title'] = NULL;
         $this->_globals['meta'] = NULL;
         $this->_globals['asset'] = NULL;
@@ -146,7 +139,6 @@ class Twiggy
     public function unset_data($key)
     {
         if(array_key_exists($key, $this->_data)) unset($this->_data[$key]);
-
         return $this;
     }
 
@@ -163,10 +155,6 @@ class Twiggy
         if(func_num_args() > 0)
         {
             $args = func_get_args();
-
-            // If at least one parameter is passed in to this method,
-            // call append() to either set the title or append additional
-            // string data to it.
             call_user_func_array(array($this, 'append'), $args);
         }
 
@@ -234,7 +222,6 @@ class Twiggy
     public function set_title_separator($separator = ' | ')
     {
         $this->_config['title_separator'] = $separator;
-
         return $this;
     }
 
@@ -251,7 +238,6 @@ class Twiggy
     public function meta($name, $value, $attribute = 'name')
     {
         $this->_meta[$name] = array('name' => $name, 'value' => $value, 'attribute' => $attribute);
-
         return $this;
     }
 
@@ -297,7 +283,6 @@ class Twiggy
     public function asset($type, $name, $value, $extra=array())
     {
         $this->_asset[$name] = array('type' => $type, 'value' => $value, 'extra' => $extra);
-
         return $this;
     }
 
@@ -339,7 +324,6 @@ class Twiggy
     public function register_function($name)
     {
         $this->_twig->addFunction($name, new Twig_Function_Function($name));
-
         return $this;
     }
 
@@ -354,7 +338,6 @@ class Twiggy
     public function register_filter($name)
     {
         $this->_twig->addFilter($name, new Twig_Filter_Function($name));
-
         return $this;
     }
 
@@ -368,7 +351,7 @@ class Twiggy
 
     public function theme($theme)
     {
-        if(!is_dir(realpath($this->_themes_base_dir. $theme)))
+        if( ! is_dir(realpath($this->_themes_base_dir. $theme)))
         {
             log_message('error', 'Twiggy: requested theme '. $theme .' has not been loaded because it does not exist.');
             show_error("Theme does not exist in {$this->_themes_base_dir}{$theme}.");
@@ -376,7 +359,6 @@ class Twiggy
 
         $this->_theme = $theme;
         $this->_set_template_locations($theme);
-
         return $this;
     }
 
@@ -392,7 +374,6 @@ class Twiggy
     {
         $this->_layout = $name;
         $this->_twig->addGlobal('_layout', '_layouts/'. $this->_layout . $this->_config['template_file_ext']);
-
         return $this;
     }
 
@@ -407,7 +388,6 @@ class Twiggy
     public function template($name)
     {
         $this->_template = $name;
-
         return $this;
     }
 
@@ -421,12 +401,7 @@ class Twiggy
     private function _compile_metadata()
     {
         $html = '';
-
-        foreach($this->_meta as $meta)
-        {
-            $html .= $this->_meta_to_html($meta);
-        }
-
+        foreach ($this->_meta as $meta) $html .= $this->_meta_to_html($meta);
         return $html;
     }
 
@@ -440,12 +415,7 @@ class Twiggy
     private function _compile_assetdata()
     {
         $html = '';
-
-        foreach($this->_asset as $asset)
-        {
-            $html .= $this->_asset_to_html($asset);
-        }
-
+        foreach ($this->_asset as $asset) $html .= $this->_asset_to_html($asset);
         return $html;
     }
 
@@ -459,7 +429,7 @@ class Twiggy
 
     private function _meta_to_html($meta)
     {
-        return "<meta " . $meta['attribute'] . "=\"" . $meta['name'] . "\" content=\"" . $meta['value'] . "\">\n";
+        return "<meta ".$meta['attribute']."=\"".$meta['name']."\" content=\"".$meta['value']."\">\n";
     }
 
     /**
@@ -490,6 +460,7 @@ class Twiggy
                     $extra .= ' type="text/javascript"';
                 }
             }
+
             return '<script src="'.$asset['value'].'"'.$extra.'></script>'."\n";        
         } else if ($asset['type'] == 'link'){
             $extra = '';
@@ -517,6 +488,7 @@ class Twiggy
                     $extra .= ' type="text/css"';
                 }
             }
+
             return '<link href="'.$asset['value'].'"'.$extra.'>'."\n";        
         }
 
@@ -535,7 +507,6 @@ class Twiggy
         $this->set('meta', $this->_compile_metadata(), TRUE);
         $this->set('asset', $this->_compile_assetdata(), TRUE);
         $this->_rendered = TRUE;
-
         return $this->_twig->loadTemplate($this->_template . $this->_config['template_file_ext']);
     }
 
@@ -549,7 +520,7 @@ class Twiggy
 
     public function render($template = '')
     {
-        if(!empty($template)) $this->template($template);
+        if( ! empty($template)) $this->template($template);
 
         try
         {
@@ -571,7 +542,7 @@ class Twiggy
 
     public function display($template = '')
     {
-        if(!empty($template)) $this->template($template);
+        if( ! empty($template)) $this->template($template);
 
         try
         {
@@ -593,42 +564,35 @@ class Twiggy
 
     private function _set_template_locations($theme)
     {
-        // Reset template locations array since we loaded a different theme
-        //$this->_template_locations = array();
-
-        // Check if HMVC is installed.
-        // NOTE: there may be a simplier way to check it but this seems good enough.
-        if(method_exists($this->CI->router, 'fetch_module'))
+        if(method_exists($this->CII->router, 'fetch_module'))
         {
-            $this->_module = $this->CI->router->fetch_module();
+            $this->_module = $this->CII->router->fetch_module();
 
-            // Only if the current page is served from a module do we need to add extra template locations.
-            if(!empty($this->_module))
+            if( ! empty($this->_module))
             {
                 if (!class_exists('Modules')) {
-                    $module_locations = $this->CI->config->item('modules_locations');
+                    $module_locations = $this->CII->config->item('modules_locations');
                 }else{
                     $module_locations = Modules::$locations;
                 }
                 foreach($module_locations as $loc => $offset)
                 {
-                    /* Only add the template location if the same exists, otherwise
-                    you'll need always a directory for your templates, even your module
-                    won't use templates */
-                    if (!class_exists('Modules')) {
-                        if ( is_dir($offset . $this->_module . '/' . $this->_config['themes_base_dir'] . $theme) )
-                            $this->_template_locations[] = $offset . $this->_module . '/' . $this->_config['themes_base_dir'] . $theme;
-                    }else{
-                        if ( is_dir($loc . $this->_module . '/' . $this->_config['themes_base_dir'] . $theme) )
-                            $this->_template_locations[] = $loc . $this->_module . '/' . $this->_config['themes_base_dir'] . $theme;
+                    if ( ! class_exists('Modules')) 
+                    {
+                        if (is_dir($offset.$this->_module.'/'.$this->_config['themes_base_dir'].$theme))
+                            $this->_template_locations[] = $offset.$this->_module.'/'.$this->_config['themes_base_dir'].$theme;
+                    }
+                    else
+                    {
+                        if (is_dir($loc.$this->_module.'/'.$this->_config['themes_base_dir'].$theme))
+                            $this->_template_locations[] = $loc.$this->_module.'/'.$this->_config['themes_base_dir'].$theme;
                     }
                 }
             }
         }
 
-        $this->_template_locations[] =  $this->_themes_base_dir . $theme;
+        $this->_template_locations[] =  $this->_themes_base_dir.$theme;
 
-        // Reset the paths if needed.
         if(is_object($this->_twig_loader))
         {
             $this->_template_locations = array_reverse($this->_template_locations);
@@ -743,7 +707,6 @@ class Twiggy
     public function __get($variable)
     {
         if($variable == 'twig') return $this->_twig;
-
         if(array_key_exists($variable, $this->_globals))
         {
             return $this->_globals[$variable];
@@ -756,4 +719,3 @@ class Twiggy
         return FALSE;
     }
 }
-// End Class
