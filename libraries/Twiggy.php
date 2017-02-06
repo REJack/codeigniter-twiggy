@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author              (Original Author) Edmundas Kondrašovas <as@edmundask.lt>
  * @author              Raphael "REJack" Jackstadt <info@rejack.de>
  * @license             http://www.opensource.org/licenses/MIT
- * @version             0.9.4
+ * @version             0.9.5
  * @copyright           Copyright (c) 2012-2014 Edmundas Kondrašovas <as@edmundask.lt>
  * @copyright           Copyright (c) 2015-2017 Raphael "REJack" Jackstadt <info@rejack.de>
  */
@@ -44,9 +44,15 @@ class Twiggy {
         log_message('debug', 'Twiggy: library initialized');
 
         $this->CII =& get_instance();
-        $this->CII->load->config('twiggy');
-        $this->_config = $this->CII->config->item('twiggy');
-
+        if (method_exists($this->CII, 'load'))
+        {
+            $this->CII->load->config('twiggy');
+            $this->_config = $this->CII->config->item('twiggy');
+        }
+        else
+        {
+            $this->_config = $this->get_config();
+        }
         if ($this->_config['load_twig_engine'] === "old_way")
         {
             require_once(TWIGGY_ROOT . '/vendor/Twig/lib/Twig/Autoloader.php');
@@ -94,6 +100,8 @@ class Twiggy {
         $this->_globals['title'] = NULL;
         $this->_globals['meta'] = NULL;
         $this->_globals['asset'] = NULL;
+        $this->_meta = $this->_config['global_meta'];
+        $this->_asset = $this->_config['global_asset'];
     }
 
     /**
@@ -235,7 +243,7 @@ class Twiggy {
      * @return	object 	instance of this class
      */
 
-    public function meta($name, $value, $attribute = 'name')
+    public function meta($value, $name = '', $attribute = 'name')
     {
         $this->_meta[$name] = array('name' => $name, 'value' => $value, 'attribute' => $attribute);
         return $this;
@@ -429,7 +437,13 @@ class Twiggy {
 
     private function _meta_to_html($meta)
     {
-        return "<meta ".$meta['attribute']."=\"".$meta['name']."\" content=\"".$meta['value']."\">\n";
+        if (empty($meta['name'])){
+           return "<meta content=\"".$meta['value']."\">\n";
+        }
+        else
+        {
+           return "<meta ".$meta['attribute']."=\"".$meta['name']."\" content=\"".$meta['value']."\">\n";
+        }
     }
 
     /**
@@ -564,7 +578,7 @@ class Twiggy {
 
     private function _set_template_locations($theme)
     {
-        if(method_exists($this->CII->router, 'fetch_module'))
+        if(method_exists($this->CII, 'router') && method_exists($this->CII->router, 'fetch_module'))
         {
             $this->_module = $this->CII->router->fetch_module();
 
@@ -718,4 +732,49 @@ class Twiggy {
 
         return FALSE;
     }
+
+    protected function get_config(Array $replace = array())
+    {
+        static $config;
+
+        if (empty($config))
+        {
+            $file_path = APPPATH.'config/twiggy.php';
+            $found = FALSE;
+            if (file_exists($file_path))
+            {
+                $found = TRUE;
+                require($file_path);
+            }
+
+            // Is the config file in the environment folder?
+            if (file_exists($file_path = APPPATH.'config/'.ENVIRONMENT.'/twiggy.php'))
+            {
+                require($file_path);
+            }
+            elseif ( ! $found)
+            {
+                set_status_header(503);
+                echo 'The configuration file does not exist.';
+                exit(3); // EXIT_CONFIG
+            }
+
+            // Does the $config array exist in the file?
+            if ( ! isset($config) OR ! is_array($config))
+            {
+                set_status_header(503);
+                echo 'Your config file does not appear to be formatted correctly.';
+                exit(3); // EXIT_CONFIG
+            }
+        }
+
+        // Are any values being dynamically added or replaced?
+        foreach ($replace as $key => $val)
+        {
+            $config[$key] = $val;
+        }
+
+        return $config['twiggy'];
+    }
+
 }

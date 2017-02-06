@@ -1,0 +1,23 @@
+{% extends _layout %}
+
+{% block content %}
+
+An uncaught Exception was encountered
+
+Type:        {{severity}}
+Message:     {{message}}
+Filename:    {{filepath}}
+Line Number: {{line}}
+
+{% if defined('SHOW_DEBUG_BACKTRACE') and SHOW_DEBUG_BACKTRACE === TRUE %}
+
+Backtrace:
+	{% for error in debug_backtrace() %}
+		{% if isset(error['file']) and strpos(error['file'], realpath(BASEPATH)) !== 0 %}
+	File: {{error['file']}}
+	Line: {{error['line']}}
+	Function: {{error['function']}}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends _layout %}
+
+{% block content %}
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+	<h4>A PHP Error was encountered</h4>
+	<p>Severity: {{severity}}</p>
+	<p>Message:  {{message}}</p>
+	<p>Filename: {{filepath}}</p>
+	<p>Line Number: {{line}}</p>
+
+	{% if defined('SHOW_DEBUG_BACKTRACE') and SHOW_DEBUG_BACKTRACE === TRUE %}
+		<p>Backtrace:</p>
+		{% for (error in debug_backtrace()) %}
+			{% if isset(error['file']) and strpos(error['file'], realpath(BASEPATH)) !== 0 %}
+				<p style="margin-left:10px">
+				File: {{error['file']}}<br />
+				Line: {{error['line']}}<br />
+				Function: {{error['function']}}
+				</p>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+</div>
+{% endblock %}
