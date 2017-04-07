@@ -9,14 +9,15 @@ Message:     {{message}}
 Filename:    {{exception.getFile()}}
 Line Number: {{exception.getLine()}}
 
-{% if defined('SHOW_DEBUG_BACKTRACE') and SHOW_DEBUG_BACKTRACE === TRUE %}
+{% if defined('SHOW_DEBUG_BACKTRACE') and SHOW_DEBUG_BACKTRACE %}
 
 Backtrace:
 	{% for error in exception.getTrace() %}
-		{% if isset(error['file']) and strpos(error['file'], realpath(BASEPATH)) !== 0 %}
-	File: {{error['file']}}
-	Line: {{error['line']}}
-	Function: {{error['function']}}
+		{% if error.file starts with realpath(BASEPATH) %}
+		{% else %}
+	File: {{error.file}}
+	Line: {{error.line}}
+	Function: {{error.function}}
 		{% endif %}
 	{% endfor %}
 {% endif %}

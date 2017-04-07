@@ -38,6 +38,13 @@ class Twiggy {
     private $_asset = array();
     private $_rendered = FALSE;
 
+    private $system_register_globals = array(
+        "SHOW_DEBUG_BACKTRACE" => SHOW_DEBUG_BACKTRACE,
+        "BASEPATH" => BASEPATH
+        );
+
+    private $system_register_functions = array('get_class', 'defined', 'isset', 'realpath', 'strpos', 'debug_backtrace');
+
 
     public function __construct()
     {
@@ -95,6 +102,9 @@ class Twiggy {
         if(count($this->_config['register_globals']) > 0){
             foreach($this->_config['register_globals'] as $k => $v) $this->set($k, $v, TRUE);
         }
+
+        foreach($this->system_register_globals as $k => $v) $this->set($k, $v, TRUE);
+        foreach($this->system_register_functions as $function) $this->register_function($function);
 
         $this->_twig->setLexer(new Twig_Lexer($this->_twig, $this->_config['delimiters']));
         $this->_globals['title'] = NULL;
