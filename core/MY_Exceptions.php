@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author    			(Original Author) Edmundas Kondrašovas <as@edmundask.lt>
  * @author    			Raphael "REJack" Jackstadt <info@rejack.de>
  * @license   			http://www.opensource.org/licenses/MIT
- * @version   			0.9.5
+ * @version   			0.9.6
  * @copyright 			Copyright (c) 2012-2014 Edmundas Kondrašovas <as@edmundask.lt>
  * @copyright 			Copyright (c) 2015-2017 Raphael "REJack" Jackstadt <info@rejack.de>
  */
