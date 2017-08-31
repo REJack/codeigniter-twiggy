@@ -92,7 +92,7 @@ class Twiggy {
              ->template($this->_config['default_template']);
 
         $this->CII->load->helper('array');
-        foreach ( element('user', get_defined_functions(true)) as $func_name )
+        foreach ( element('user', get_defined_functions()) as $func_name )
             if (strpos($func_name, 'twig') === FALSE) 
                 $this->register_function($func_name);
 
