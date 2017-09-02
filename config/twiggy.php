@@ -192,6 +192,18 @@ $config['twiggy']['environment']['strict_variables']   	= FALSE;
 $config['twiggy']['environment']['autoescape']         	= FALSE;
 $config['twiggy']['environment']['optimizations']      	= -1;
 
+/*
+|--------------------------------------------------------------------------
+| Using all user defined functions
+|--------------------------------------------------------------------------
+| Auto-register all user defined functions.
+| If set to TRUE make sure you don't have camelCase functions
+| example: having like  function setId(){}  will result in changing its usage inside
+| twig as {{ setid() }} because PHP's get_defined_functions() function returns any function name lower-cased.
+| By default it is being set to FALSE
+*/
+$config['twiggy']['use_user_defined_functions'] = FALSE;
+
 
 /*
 |--------------------------------------------------------------------------
