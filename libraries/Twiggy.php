@@ -91,6 +91,13 @@ class Twiggy {
              ->layout($this->_config['default_layout'])
              ->template($this->_config['default_template']);
 
+        if($this->_config['use_user_defined_functions'] == TRUE)
+        {
+            $this->CII->load->helper('array');
+            foreach ( element('user', get_defined_functions()) as $func_name )
+                if (strpos($func_name, 'twig') === FALSE) 
+                    $this->register_function($func_name);
+        }
         if(count($this->_config['register_functions']) > 0)
         {
             foreach($this->_config['register_functions'] as $function) $this->register_function($function);
