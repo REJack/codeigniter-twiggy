@@ -69,7 +69,8 @@ class Twiggy {
             require_once(TWIGGY_ROOT . '/vendor/Twig/Autoloader.php');
         } 
 
-        Twig_Autoloader::register();
+        if ($this->_config['load_twig_engine'] !== FALSE)
+            Twig_Autoloader::register();
 
         $this->_themes_base_dir = ($this->_config['include_apppath']) ? APPPATH . $this->_config['themes_base_dir'] : $this->_config['themes_base_dir'];
         $this->_set_template_locations($this->_config['default_theme']);
@@ -113,7 +114,6 @@ class Twiggy {
         foreach($this->system_register_globals as $k => $v) $this->set($k, $v, TRUE);
         foreach($this->system_register_functions as $function) $this->register_function($function);
 
-        $this->_twig->setLexer(new Twig_Lexer($this->_twig, $this->_config['delimiters']));
         $this->_globals['title'] = NULL;
         $this->_globals['meta'] = NULL;
         $this->_globals['asset'] = NULL;
@@ -348,7 +348,11 @@ class Twiggy {
 
     public function register_function($name)
     {
-        $this->_twig->addFunction($name, new Twig_Function_Function($name));
+        if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+            $this->_twig->addFunction(new \Twig_Function($name, $name));
+        else
+            $this->_twig->addFunction($name, new Twig_Function_Function($name));
+
         return $this;
     }
 
@@ -362,7 +366,11 @@ class Twiggy {
 
     public function register_filter($name)
     {
-        $this->_twig->addFilter($name, new Twig_Filter_Function($name));
+        if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+            $this->_twig->addFilter(new \Twig_Filter($name, $name));
+        else
+            $this->_twig->addFilter($name, new Twig_Filter_Function($name)); 
+        
         return $this;
     }
 
@@ -538,7 +546,12 @@ class Twiggy {
         $this->set('meta', $this->_compile_metadata(), TRUE);
         $this->set('asset', $this->_compile_assetdata(), TRUE);
         $this->_rendered = TRUE;
-        return $this->_twig->loadTemplate($this->_template . $this->_config['template_file_ext']);
+        $this->_twig->setLexer(new Twig_Lexer($this->_twig, $this->_config['delimiters']));
+
+        if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+            return $this->_twig->loadTemplate($this->_template . $this->_config['template_file_ext']);
+        else
+            return $this->_twig->load($this->_template . $this->_config['template_file_ext']);
     }
 
     /**
