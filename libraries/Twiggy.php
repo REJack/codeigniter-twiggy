@@ -45,7 +45,7 @@ class Twiggy {
 
     private $system_register_functions = array('get_class', 'defined', 'isset', 'realpath', 'strpos', 'debug_backtrace');
 
-    private $system_register_safe_functions = array();
+    private $system_register_safe_functions = array('assets');
 
 
     public function __construct()
@@ -316,9 +316,12 @@ class Twiggy {
      * @return  object  instance of this class
      */
 
-    public function asset($type, $name, $value, $extra=array())
-    {
-        $this->_asset[$name] = array('type' => $type, 'value' => $value, 'extra' => $extra);
+    public function asset($type, $value, $group=NULL, $extra=array())
+    {   
+        if ($group)
+            $this->_asset[$group][] = array('type' => $type, 'value' => $value, 'extra' => $extra);
+        else
+            $this->_asset[] = array('type' => $type, 'value' => $value, 'extra' => $extra);
         return $this;
     }
 
@@ -487,6 +490,22 @@ class Twiggy {
     }
 
     /**
+     * Compile group asset data into pure HTML
+     *
+     * @access  private
+     * @return  string  HTML
+     */
+
+    public function _compile_group_assetdata($group)
+    {
+        if ( ! isset($this->_asset[$group]))
+            return;
+        $html = '';
+        foreach ($this->_asset[$group] as $asset) $html .= $this->_asset_to_html($asset);
+        return $html;
+    }
+
+    /**
      * Convert meta tag array to HTML code
      *
      * @access	private
@@ -515,6 +534,11 @@ class Twiggy {
 
     private function _asset_to_html($asset)
     {
+        if ( ! isset($asset['type']) && isset($asset[0]) && $this->_config['render_all_assets'])
+            $asset = $asset[0];
+        else 
+            return;
+
         if($asset['type'] == 'script'){
             $extra = '';
             if(isset($asset['extra'])){

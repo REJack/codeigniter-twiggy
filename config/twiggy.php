@@ -181,6 +181,19 @@ $config['twiggy']['load_twig_engine'] = false;
 
 /*
 |--------------------------------------------------------------------------
+| Render Assets incl. Groups
+|--------------------------------------------------------------------------
+|
+| If you activate this any assets including group asset get rendered
+| through {{asset}} in layout/template
+|
+*/
+
+$config['twiggy']['render_all_assets'] = false;
+
+
+/*
+|--------------------------------------------------------------------------
 | Syntax Delimiters
 |--------------------------------------------------------------------------
 |
