@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author              (Original Author) Edmundas Kondrašovas <as@edmundask.lt>
  * @author              Raphael "REJack" Jackstadt <info@rejack.de>
  * @license             http://www.opensource.org/licenses/MIT
- * @version             0.9.8
+ * @version             0.9.9
  * @copyright           Copyright (c) 2012-2014 Edmundas Kondrašovas <as@edmundask.lt>
  * @copyright           Copyright (c) 2015-2017 Raphael "REJack" Jackstadt <info@rejack.de>
  */
@@ -534,10 +534,11 @@ class Twiggy {
 
     private function _asset_to_html($asset)
     {
-        if ( ! isset($asset['type']) && isset($asset[0]) && $this->_config['render_all_assets'])
-            $asset = $asset[0];
-        else 
-            return;
+        if ( ! isset($asset['type']) && isset($asset[0]))
+            if ($this->_config['render_all_assets'])
+                $asset = $asset[0];
+            else 
+                return;
 
         if($asset['type'] == 'script'){
             $extra = '';
