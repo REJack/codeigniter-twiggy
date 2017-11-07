@@ -28,24 +28,9 @@ if ( ! function_exists('get_twiggy_instance'))
     }
 }
 
-if ( ! function_exists('assets'))
+if ( ! function_exists('twig'))
 {
-	function assets($group = NULL)
-	{
-		$twiggy = get_twiggy_instance();
-		return $twiggy->_compile_group_assetdata($group);
-	}
-}
-
-
-if ( ! function_exists('twig')) {
-    /**
-     * Displays a twig template - alias for the Twiggy render/display method
-     * @param  string $name
-     * @param  array $data
-     * @return void
-     */
-    function twig($name, $render = NULL, $data = NULL)
+    function twig($name, $data = NULL, $render = NULL)
     {
         $twiggy = get_twiggy_instance();
         $twiggy->template($name);
@@ -63,105 +48,81 @@ if ( ! function_exists('twig')) {
     }
 }
 
+if ( ! function_exists('assets'))
+{
+    function assets($group = NULL)
+    {
+        $twiggy = get_twiggy_instance();
+        return $twiggy->_compile_group_assetdata($group);
+    }
+}
+
 if ( ! function_exists('set_theme'))
 {
-    /**
-     * Sets the theme for twiggy
-     * @param  string $name
-     * @return void
-     */
     function set_theme($name)
     {
         $twiggy = get_twiggy_instance();
-        return $twiggy->theme($name);
+        $twiggy->theme($name);
+        return;
     }
 }
 
 if ( ! function_exists('set_layout'))
 {
-    /**
-     * Sets the layout for twiggy
-     * @param  string $name
-     * @return void
-     */
     function set_layout($name)
     {
         $twiggy = get_twiggy_instance();
-        return $twiggy->layout($name);
+        $twiggy->layout($name);
+        return;
     }
 }
 
 if ( ! function_exists('set_page_title'))
 {
-    /**
-     * set the title of the page
-     * @param string  $title
-     * @param string  $append  <optional>
-     * @return void
-     */
     function set_page_title($title)
     {
         $twiggy = get_twiggy_instance();
-        return $twiggy->title($title);
+        $twiggy->title($title);
+        return;
     }
 }
 
 if ( ! function_exists('append_page_title'))
 {
-    /**
-     * Add a title after an already set title
-     * @param  string $title
-     * @return void
-     */
     function append_page_title($title)
     {
         $twiggy = get_twiggy_instance();
-        return $twiggy->append($title);
+        $twiggy->append($title);
+        return;
     }
 }
 
 if ( ! function_exists('prepend_page_title'))
 {
-    /**
-     * Add a title before an already set title
-     * @param  string $title
-     * @return void
-     */
     function prepend_page_title($title)
     {
         $twiggy = get_twiggy_instance();
-        return $twiggy->prepend($title);
+        $twiggy->prepend($title);
+        return;
     }
 }
 
 if ( ! function_exists('set_metatag'))
 {
-    /**
-     * Set a meta tag
-     * @param string $name      name of the meta tag
-     * @param string $value     content of the meta tag
-     * @param string $attribute attribute of the meta tag
-     * @return void
-     */
     function set_metatag($name, $value, $attribute = 'name')
     {
         $twiggy = get_twiggy_instance();
-        return $twiggy->meta($name, $value, $attribute);
+        $twiggy->meta($name, $value, $attribute);
+        return;
     }
 }
 
 if ( ! function_exists('set_asset'))
 {
-    /**
-     * Set an asset
-     * @param string $name      name of the meta tag
-     * @param string $value     content of the meta tag
-     * @param string $attribute attribute of the meta tag
-     * @return void
-     */
-    function set_asset($type, $value, $name, $extra=array() )
+    function set_asset($type, $value, $group = NULL, $extra=array())
     {
         $twiggy = get_twiggy_instance();
-        return $twiggy->asset($type, $value, $name, $extra);
+        $twiggy->asset($type, $value, $group, $extra);
+        return;
      }
 }
