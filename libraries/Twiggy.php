@@ -515,12 +515,19 @@ class Twiggy {
 
     private function _meta_to_html($meta)
     {
-        if (empty($meta['name'])){
-           return "<meta content=\"".$meta['value']."\">\n";
+        if (empty($meta['attribute'])){
+           return "<meta name=\"".$meta['name']."\ value=\"".$meta['value']."\">\n";
         }
         else
         {
-           return "<meta ".$meta['attribute']."=\"".$meta['name']."\" content=\"".$meta['value']."\">\n";
+            if ($meta['value'] !== '')
+            {
+                return '<meta '.$meta['attribute'].'="'.$meta['name'].'" content="'.$meta['value'].'">\n';
+            }
+            else
+            {
+                return '<meta '.$meta['attribute'].'="'.$meta['name'].'">\n';
+            }
         }
     }
 
