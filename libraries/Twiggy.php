@@ -271,7 +271,7 @@ class Twiggy {
      * @return	object 	instance of this class
      */
 
-    public function meta($value, $name = '', $attribute = 'name')
+    public function meta($value, $name = '', $attribute = NULL)
     {
         $this->_meta[$name] = array('name' => $name, 'value' => $value, 'attribute' => $attribute);
         return $this;
