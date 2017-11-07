@@ -1,0 +1,56 @@
+# Summary
+
+## Overview
+
+* [Introduction](README.md)
+* [How To Use](how-to.md)
+* [Examples & Best Practices](examples.md)
+* [Installation](install.md)
+  * [Composer](install.md#1-composer-recommend)
+  * [Non-Composer](install.md#2-non-composer)
+* [Configuration](config.md)
+  * [Title](config.md#title)
+  * [Functions, Filters & Globals](config.md#functions-filters--globals)
+  * [Asset & Metatag](config.md#asset--metatag)
+  * [Folder/File Structure](config.md#folderfile-structure)
+  * [Twig Environment](config.md#twig-environment)
+
+## Library Methods
+
+* [render()](class.md#Twiggy->render)
+* [display()](class.md#Twiggy->display)
+* [theme()](class.md#Twiggy->theme)
+* [layout()](class.md#Twiggy->layout)
+* [template()](class.md#Twiggy->template)
+* [register_function()](class.md#Twiggy->register_function)
+* [register_filter()](class.md#Twiggy->register_filter)
+* [set()](class.md#Twiggy->set)
+* [unset_data()](class.md#Twiggy->unset_data)
+* [title()](class.md#Twiggy->title)
+* [append()](class.md#Twiggy->append)
+* [prepend()](class.md#Twiggy->prepend)
+* [set_title_separator()](class.md#Twiggy->set_title_separator)
+* [meta()](class.md#Twiggy->meta)
+* [unset_meta()](class.md#Twiggy->unset_meta)
+* [asset()](class.md#Twiggy->asset)
+* [unset_asset()](class.md#Twiggy->unset_asset)
+* [get_theme()](class.md#Twiggy->get_theme)
+* [get_layout()](class.md#Twiggy->get_layout)
+* [get_template()](class.md#Twiggy->get_template)
+* [rendered()](class.md#Twiggy->rendered)
+* [get_meta()](class.md#Twiggy->get_meta)
+* [get_asset()](class.md#Twiggy->get_asset)
+* [__get()](class.md#Twiggy->__get)
+
+## Helper Functions
+
+* [get_twig_instance()](helper.md#get_twig_instance)
+* [twig()](helper.md#twig)
+* [set_theme()](helper.md#set_theme)
+* [set_layout()](helper.md#set_layout)
+* [set_page_title()](helper.md#set_page_title)
+* [append_page_title()](helper.md#append_page_title)
+* [prepend_page_title()](helper.md#prepend_page_title)
+* [set_metatag()](helper.md#set_metatag)
+* [set_asset()](helper.md#set_asset)
+* [render_assets()](helper.md#render_assets)

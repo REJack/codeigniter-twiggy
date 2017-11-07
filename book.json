@@ -1,0 +1,12 @@
+{
+	"root": "./_docs",
+	"plugins": [ "phpclassdisplayer@1.0.4" ],
+	"pluginsConfig": {
+		"phpclassdisplayer": {
+			"scope": "->",
+			"anchors": true,
+			"hint_iconcenter": true,
+			"hint_iconsize": "fa-3x"
+		}
+	}
+}
