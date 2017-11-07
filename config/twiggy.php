@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author    			(Original Author) Edmundas Kondrašovas <as@edmundask.lt>
  * @author    			Raphael "REJack" Jackstadt <info@rejack.de>
  * @license   			http://www.opensource.org/licenses/MIT
- * @version   			0.9.6
+ * @version   			0.9.8
  * @copyright 			Copyright (c) 2012-2014 Edmundas Kondrašovas <as@edmundask.lt>
  * @copyright 			Copyright (c) 2015-2017 Raphael "REJack" Jackstadt <info@rejack.de>
  */
@@ -75,6 +75,28 @@ $config['twiggy']['register_functions'] = array
 
 /*
 |--------------------------------------------------------------------------
+| Auto-reigster safe functions
+|--------------------------------------------------------------------------
+|
+| Here you can list all the functions that you want Twiggy to automatically
+| register them for you and automatic escapes the output.
+|
+| NOTE: only registered functions can be used in Twig templates.
+|
+| NOTE: More details in twig documentation.
+| Twig 1: https://twig.symfony.com/doc/1.x/advanced.html#automatic-escaping
+| Twig 2: https://twig.symfony.com/doc/2.x/advanced.html#automatic-escaping
+|
+*/
+
+$config['twiggy']['register_safe_functions'] = array
+(
+
+);
+
+
+/*
+|--------------------------------------------------------------------------
 | Auto-reigster filters
 |--------------------------------------------------------------------------
 |
@@ -88,6 +110,30 @@ $config['twiggy']['register_functions'] = array
 */
 
 $config['twiggy']['register_filters'] = array
+(
+
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Auto-reigster safe filters
+|--------------------------------------------------------------------------
+|
+| Much like with functions, list filters that you want Twiggy to
+| automatically register them for you and automatic escapes the output.
+|
+| NOTE: only registered filters can be used in Twig templates. Also, keep
+| in mind that a filter is nothing more than just a regular function that
+| acceps a string (value) as a parameter and outputs a modified/new string.
+|
+| NOTE: More details in twig documentation.
+| Twig 1: https://twig.symfony.com/doc/1.x/advanced.html#automatic-escaping
+| Twig 2: https://twig.symfony.com/doc/2.x/advanced.html#automatic-escaping
+|
+*/
+
+$config['twiggy']['register_safe_filters'] = array
 (
 
 );

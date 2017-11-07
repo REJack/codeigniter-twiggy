@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author              (Original Author) Edmundas Kondrašovas <as@edmundask.lt>
  * @author              Raphael "REJack" Jackstadt <info@rejack.de>
  * @license             http://www.opensource.org/licenses/MIT
- * @version             0.9.7
+ * @version             0.9.8
  * @copyright           Copyright (c) 2012-2014 Edmundas Kondrašovas <as@edmundask.lt>
  * @copyright           Copyright (c) 2015-2017 Raphael "REJack" Jackstadt <info@rejack.de>
  */
@@ -41,9 +41,11 @@ class Twiggy {
     private $system_register_globals = array(
         "SHOW_DEBUG_BACKTRACE" => SHOW_DEBUG_BACKTRACE,
         "BASEPATH" => BASEPATH
-        );
+    );
 
     private $system_register_functions = array('get_class', 'defined', 'isset', 'realpath', 'strpos', 'debug_backtrace');
+
+    private $system_register_safe_functions = array();
 
 
     public function __construct()
@@ -96,16 +98,24 @@ class Twiggy {
         {
             $this->CII->load->helper('array');
             foreach ( element('user', get_defined_functions()) as $func_name )
-                if (strpos($func_name, 'twig') === FALSE) 
+                if (strpos($func_name, 'twig') === FALSE)
                     $this->register_function($func_name);
         }
         if(count($this->_config['register_functions']) > 0)
         {
             foreach($this->_config['register_functions'] as $function) $this->register_function($function);
         }
+        if(count($this->_config['register_safe_functions']) > 0)
+        {
+            foreach($this->_config['register_safe_functions'] as $function) $this->register_function($function, TRUE);
+        }
         if(count($this->_config['register_filters']) > 0)
         {
             foreach($this->_config['register_filters'] as $filter) $this->register_filter($filter);
+        }
+        if(count($this->_config['register_safe_filters']) > 0)
+        {
+            foreach($this->_config['register_safe_filters'] as $filter) $this->register_filter($filter, TRUE);
         }
         if(count($this->_config['register_globals']) > 0){
             foreach($this->_config['register_globals'] as $k => $v) $this->set($k, $v, TRUE);
@@ -113,6 +123,7 @@ class Twiggy {
 
         foreach($this->system_register_globals as $k => $v) $this->set($k, $v, TRUE);
         foreach($this->system_register_functions as $function) $this->register_function($function);
+        foreach($this->system_register_safe_functions as $function) $this->register_function($function, TRUE);
 
         $this->_globals['title'] = NULL;
         $this->_globals['meta'] = NULL;
@@ -346,13 +357,24 @@ class Twiggy {
      * @return	object	instance of this class
      */
 
-    public function register_function($name)
+    public function register_function($name, $safe = NULL)
     {
-        if (substr(Twig_Environment::VERSION, 0, 1) == '2')
-            $this->_twig->addFunction(new \Twig_Function($name, $name));
-        else
-            $this->_twig->addFunction($name, new Twig_Function_Function($name));
+        if ($safe)
+        {
+            if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+                $function = new Twig_Function($name, $name, array('is_safe' => array('html')));
+            else
+                $function = new Twig_SimpleFunction($name, $name, array('is_safe' => array('html')));
 
+            $this->_twig->addFunction($function);
+        }
+        else 
+        {
+            if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+                $this->_twig->addFunction(new \Twig_Function($name, $name));
+            else
+                $this->_twig->addFunction($name, new Twig_Function_Function($name));
+        }
         return $this;
     }
 
@@ -364,12 +386,24 @@ class Twiggy {
      * @return	object	instance of this class
      */
 
-    public function register_filter($name)
+    public function register_filter($name, $safe = NULL)
     {
-        if (substr(Twig_Environment::VERSION, 0, 1) == '2')
-            $this->_twig->addFilter(new \Twig_Filter($name, $name));
-        else
-            $this->_twig->addFilter($name, new Twig_Filter_Function($name)); 
+        if ($safe)
+        {
+            if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+                $filter = new Twig_Filter($name, $name, array('is_safe' => array('html')));
+            else
+                $filter = new Twig_SimpleFilter($name, $name, array('is_safe' => array('html')));
+
+            $this->_twig->addFilter($filter);
+        }
+        else 
+        {
+            if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+                $this->_twig->addFilter(new \Twig_Filter($name, $name));
+            else
+                $this->_twig->addFilter($name, new Twig_Filter_Function($name)); 
+        }
         
         return $this;
     }
