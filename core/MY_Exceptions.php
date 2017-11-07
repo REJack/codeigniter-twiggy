@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author    			(Original Author) Edmundas Kondrašovas <as@edmundask.lt>
  * @author    			Raphael "REJack" Jackstadt <info@rejack.de>
  * @license   			http://www.opensource.org/licenses/MIT
- * @version   			0.9.6
+ * @version   			0.9.8
  * @copyright 			Copyright (c) 2012-2014 Edmundas Kondrašovas <as@edmundask.lt>
  * @copyright 			Copyright (c) 2015-2017 Raphael "REJack" Jackstadt <info@rejack.de>
  */
@@ -110,7 +110,7 @@ class MY_Exceptions extends CI_Exceptions {
 
 		ob_start();
 		$this->twiggy->template('errors/'.$type.'/error_exception');
-		$this->twiggy->set(array('exception' => $exception));
+		$this->twiggy->set(array('message' => $message, 'exception' => $exception));
 		echo $this->twiggy->display();
 		$buffer = ob_get_contents();
 		ob_end_clean();
