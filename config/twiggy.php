@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author    			(Original Author) Edmundas Kondrašovas <as@edmundask.lt>
  * @author    			Raphael "REJack" Jackstadt <info@rejack.de>
  * @license   			http://www.opensource.org/licenses/MIT
- * @version   			0.9.8
+ * @version   			0.9.9
  * @copyright 			Copyright (c) 2012-2014 Edmundas Kondrašovas <as@edmundask.lt>
  * @copyright 			Copyright (c) 2015-2017 Raphael "REJack" Jackstadt <info@rejack.de>
  */
@@ -53,6 +53,22 @@ $config['twiggy']['global_asset'] = array
 */
 
 $config['twiggy']['title_separator'] = ' | ';
+
+
+/*
+|--------------------------------------------------------------------------
+| Title adding method
+|--------------------------------------------------------------------------
+|
+| Lets you specify the adding method used in title()
+| 
+| Options: append, prepend
+|
+| Default: append
+|
+*/
+
+$config['twiggy']['title_adding_method'] = 'append';
 
 
 /*

@@ -191,7 +191,7 @@ class Twiggy {
         if(func_num_args() > 0)
         {
             $args = func_get_args();
-            call_user_func_array(array($this, 'append'), $args);
+            call_user_func_array(array($this, $this->_config['title_adding_method']), $args);
         }
 
         return $this;
