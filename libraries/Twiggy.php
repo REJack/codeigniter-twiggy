@@ -45,7 +45,7 @@ class Twiggy {
 
     private $system_register_functions = array('get_class', 'defined', 'isset', 'realpath', 'strpos', 'debug_backtrace');
 
-    private $system_register_safe_functions = array('assets');
+    private $system_register_safe_functions = array('render_assets');
 
 
     public function __construct()

@@ -48,15 +48,6 @@ if ( ! function_exists('twig'))
     }
 }
 
-if ( ! function_exists('assets'))
-{
-    function assets($group = NULL)
-    {
-        $twiggy = get_twiggy_instance();
-        return $twiggy->_compile_group_assetdata($group);
-    }
-}
-
 if ( ! function_exists('set_theme'))
 {
     function set_theme($name)
@@ -126,3 +117,13 @@ if ( ! function_exists('set_asset'))
         return;
      }
 }
+
+if ( ! function_exists('render_assets'))
+{
+    function render_assets($group = NULL)
+    {
+        $twiggy = get_twiggy_instance();
+        return $twiggy->_compile_group_assetdata($group);
+    }
+}
+
