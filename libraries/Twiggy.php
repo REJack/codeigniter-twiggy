@@ -60,7 +60,7 @@ class Twiggy {
         }
         else
         {
-            $this->_config = $this->get_config();
+            $this->_config = $this->get_config(array('use_user_defined_functions' => FALSE));
         }
 
         if ($this->_config['load_twig_engine'] === "old_way")
@@ -747,7 +747,7 @@ class Twiggy {
 
         foreach ($replace as $key => $val)
         {
-            $config[$key] = $val;
+            $config['twiggy'][$key] = $val;
         }
 
         return $config['twiggy'];
