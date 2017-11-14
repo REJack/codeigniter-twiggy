@@ -53,7 +53,7 @@ class Twiggy {
         log_message('debug', 'Twiggy: library initialized');
 
         $this->CII =& get_instance();
-        if (method_exists($this->CII, 'load'))
+        if (@$this->CII->load)
         {
             $this->CII->load->config('twiggy');
             $this->_config = $this->CII->config->item('twiggy');
