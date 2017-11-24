@@ -8,21 +8,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * for CodeIgniter. It supports themes, layouts, templates for regular
  * apps and also for apps that use HMVC (module support).
  *
- * @package   			CodeIgniter
- * @subpackage			Twiggy
- * @author    			(Original Author) Edmundas Kondrašovas <as@edmundask.lt>
- * @author    			Raphael "REJack" Jackstadt <info@rejack.de>
- * @license   			http://www.opensource.org/licenses/MIT
- * @version   			1.0.0
- * @copyright 			Copyright (c) 2012-2014 Edmundas Kondrašovas <as@edmundask.lt>
- * @copyright 			Copyright (c) 2015-2017 Raphael "REJack" Jackstadt <info@rejack.de>
+ * @package             CodeIgniter
+ * @subpackage          Twiggy
+ * @author              (Original Author) Edmundas Kondrašovas <as@edmundask.lt>
+ * @author              Raphael "REJack" Jackstadt <info@rejack.de>
+ * @license             http://www.opensource.org/licenses/MIT
+ * @version             1.0.0
+ * @copyright           Copyright (c) 2012-2014 Edmundas Kondrašovas <as@edmundask.lt>
+ * @copyright           Copyright (c) 2015-2017 Raphael "REJack" Jackstadt <info@rejack.de>
  */
 
 if ( ! function_exists('get_twiggy_instance'))
 {
     function get_twiggy_instance()
     {
-        $CII =& get_instance();          
+        $CII = &get_instance();
         $CII->load->library('twiggy');
         return $CII->twiggy;
     }
@@ -38,12 +38,12 @@ if ( ! function_exists('twig'))
 
         if ( ! $render)
         {
-        	return $twiggy->render();
-       	}
-       	else
-       	{
-    		return $twiggy->display();
-       	}
+            return $twiggy->render();
+        }
+        else
+        {
+            return $twiggy->display();
+        }
 
     }
 }
@@ -110,12 +110,12 @@ if ( ! function_exists('set_metatag'))
 
 if ( ! function_exists('set_asset'))
 {
-    function set_asset($type, $value, $group = NULL, $extra=array())
+    function set_asset($type, $value, $group = NULL, $extra = array())
     {
         $twiggy = get_twiggy_instance();
         $twiggy->asset($type, $value, $group, $extra);
         return;
-     }
+    }
 }
 
 if ( ! function_exists('render_assets'))
@@ -126,4 +126,3 @@ if ( ! function_exists('render_assets'))
         return $twiggy->_compile_group_assetdata($group);
     }
 }
-

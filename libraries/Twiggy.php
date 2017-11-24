@@ -26,10 +26,6 @@ if ( ! defined('TWIGGY_ROOT'))
 class Twiggy {
 
     private $CII;
-    private $_config = array();
-    private $_template_locations = array();
-    private $_data = array();
-    private $_globals = array();
     private $_themes_base_dir;
     private $_theme;
     private $_layout;
@@ -37,22 +33,25 @@ class Twiggy {
     private $_twig;
     private $_twig_loader;
     private $_module;
+    private $_rendered = FALSE;
+    private $_config = array();
+    private $_template_locations = array();
+    private $_data = array();
+    private $_globals = array();
     private $_meta = array();
     private $_asset = array();
-    private $_rendered = FALSE;
     private $system_register_globals = array(
-        "SHOW_DEBUG_BACKTRACE" => SHOW_DEBUG_BACKTRACE,
-        "BASEPATH" => BASEPATH
+        'SHOW_DEBUG_BACKTRACE' => SHOW_DEBUG_BACKTRACE,
+        'BASEPATH' => BASEPATH,
     );
     private $system_register_functions = array('get_class', 'defined', 'isset', 'realpath', 'strpos', 'debug_backtrace');
     private $system_register_safe_functions = array('render_assets');
 
-
     public function __construct()
-    { 
+    {
         log_message('debug', 'Twiggy: library initialized');
+        $this->CII = &get_instance();
 
-        $this->CII =& get_instance();
         if (@$this->CII->load)
         {
             $this->CII->load->config('twiggy');
@@ -62,29 +61,27 @@ class Twiggy {
         {
             $this->_config = $this->get_config(array('use_user_defined_functions' => FALSE));
         }
-
-        if ($this->_config['load_twig_engine'] === "old_way")
+        if ($this->_config['load_twig_engine'] === 'old_way')
         {
-            require_once(TWIGGY_ROOT . '/vendor/Twig/lib/Twig/Autoloader.php');
-        } 
+            require_once TWIGGY_ROOT.'/vendor/Twig/lib/Twig/Autoloader.php';
+        }
         else if ($this->_config['load_twig_engine'] === TRUE)
         {
-            require_once(TWIGGY_ROOT . '/vendor/Twig/Autoloader.php');
-        } 
-
+            require_once TWIGGY_ROOT.'/vendor/Twig/Autoloader.php';
+        }
         if ($this->_config['load_twig_engine'] !== FALSE)
         {
             Twig_Autoloader::register();
         }
 
-        $this->_themes_base_dir = ($this->_config['include_apppath']) ? APPPATH . $this->_config['themes_base_dir'] : $this->_config['themes_base_dir'];
+        $this->_themes_base_dir = ($this->_config['include_apppath']) ? APPPATH.$this->_config['themes_base_dir'] : $this->_config['themes_base_dir'];
         $this->_set_template_locations($this->_config['default_theme']);
 
         try
         {
             $this->_twig_loader = new Twig_Loader_Filesystem($this->_template_locations);
         }
-        catch(Twig_Error_Loader $e)
+        catch (Twig_Error_Loader $e)
         {
             log_message('error', 'Twiggy: failed to load the default theme');
             show_error($e->getRawMessage());
@@ -92,12 +89,9 @@ class Twiggy {
 
         $this->_config['environment']['cache'] = ($this->_config['environment']['cache']) ? $this->_config['twig_cache_dir'] : FALSE;
         $this->_twig = new Twig_Environment($this->_twig_loader, $this->_config['environment']);
+        $this->theme($this->_config['default_theme'])->layout($this->_config['default_layout'])->template($this->_config['default_template']);
 
-        $this->theme($this->_config['default_theme'])
-             ->layout($this->_config['default_layout'])
-             ->template($this->_config['default_template']);
-
-        if ($this->_config['use_user_defined_functions'] == TRUE)
+        if ($this->_config['use_user_defined_functions'] === TRUE)
         {
             $this->CII->load->helper('array');
             foreach (element('user', get_defined_functions()) as $func_name)
@@ -108,7 +102,6 @@ class Twiggy {
                 }
             }
         }
-
         if (count($this->_config['register_functions']) > 0)
         {
             foreach ($this->_config['register_functions'] as $function)
@@ -116,7 +109,6 @@ class Twiggy {
                 $this->register_function($function);
             }
         }
-        
         if (count($this->_config['register_safe_functions']) > 0)
         {
             foreach ($this->_config['register_safe_functions'] as $function)
@@ -124,7 +116,6 @@ class Twiggy {
                 $this->register_function($function, TRUE);
             }
         }
-        
         if (count($this->_config['register_filters']) > 0)
         {
             foreach ($this->_config['register_filters'] as $filter)
@@ -132,7 +123,6 @@ class Twiggy {
                 $this->register_filter($filter);
             }
         }
-        
         if (count($this->_config['register_safe_filters']) > 0)
         {
             foreach ($this->_config['register_safe_filters'] as $filter)
@@ -140,24 +130,21 @@ class Twiggy {
                 $this->register_filter($filter, TRUE);
             }
         }
-        
-        if (count($this->_config['register_globals']) > 0){
-            foreach ($this->_config['register_globals'] as $k => $v) 
+        if (count($this->_config['register_globals']) > 0)
+        {
+            foreach ($this->_config['register_globals'] as $k => $v)
             {
                 $this->set($k, $v, TRUE);
             }
         }
-
-        foreach ($this->system_register_globals as $k => $v) 
+        foreach ($this->system_register_globals as $k => $v)
         {
             $this->set($k, $v, TRUE);
         }
-        
         foreach ($this->system_register_functions as $function)
         {
             $this->register_function($function);
         }
-        
         foreach ($this->system_register_safe_functions as $function)
         {
             $this->register_function($function, TRUE);
@@ -172,13 +159,15 @@ class Twiggy {
 
     public function render($template = '')
     {
-        if ( ! empty($template)) $this->template($template);
-
+        if ( ! empty($template))
+        {
+            $this->template($template);
+        }
         try
         {
             return $this->_load()->render($this->_data);
         }
-        catch(Twig_Error_Loader $e)
+        catch (Twig_Error_Loader $e)
         {
             show_error($e->getRawMessage());
         }
@@ -186,16 +175,15 @@ class Twiggy {
 
     public function display($template = '')
     {
-        if ( ! empty($template)) 
+        if ( ! empty($template))
         {
             $this->template($template);
         }
-
         try
         {
             $this->_load()->display($this->_data);
         }
-        catch(Twig_Error_Loader $e)
+        catch (Twig_Error_Loader $e)
         {
             show_error($e->getRawMessage());
         }
@@ -203,9 +191,9 @@ class Twiggy {
 
     public function theme($theme)
     {
-        if ( ! is_dir(realpath($this->_themes_base_dir. $theme)))
+        if ( ! is_dir(realpath($this->_themes_base_dir.$theme)))
         {
-            log_message('error', 'Twiggy: requested theme '. $theme .' has not been loaded because it does not exist.');
+            log_message('error', 'Twiggy: requested theme '.$theme.' has not been loaded because it does not exist.');
             show_error("Theme does not exist in {$this->_themes_base_dir}{$theme}.");
         }
 
@@ -217,7 +205,7 @@ class Twiggy {
     public function layout($name)
     {
         $this->_layout = $name;
-        $this->_twig->addGlobal('_layout', '_layouts/'. $this->_layout . $this->_config['template_file_ext']);
+        $this->_twig->addGlobal('_layout', '_layouts/'.$this->_layout.$this->_config['template_file_ext']);
         return $this;
     }
 
@@ -231,7 +219,7 @@ class Twiggy {
     {
         if ($safe)
         {
-            if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+            if (substr(Twig_Environment::VERSION, 0, 1) === '2')
             {
                 $function = new Twig_Function($name, $name, array('is_safe' => array('html')));
             }
@@ -242,9 +230,9 @@ class Twiggy {
 
             $this->_twig->addFunction($function);
         }
-        else 
+        else
         {
-            if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+            if (substr(Twig_Environment::VERSION, 0, 1) === '2')
             {
                 $this->_twig->addFunction(new \Twig_Function($name, $name));
             }
@@ -253,6 +241,7 @@ class Twiggy {
                 $this->_twig->addFunction($name, new Twig_Function_Function($name));
             }
         }
+
         return $this;
     }
 
@@ -260,29 +249,42 @@ class Twiggy {
     {
         if ($safe)
         {
-            if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+            if (substr(Twig_Environment::VERSION, 0, 1) === '2')
+            {
                 $filter = new Twig_Filter($name, $name, array('is_safe' => array('html')));
+            }
             else
+            {
                 $filter = new Twig_SimpleFilter($name, $name, array('is_safe' => array('html')));
+            }
 
             $this->_twig->addFilter($filter);
         }
-        else 
+        else
         {
-            if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+            if (substr(Twig_Environment::VERSION, 0, 1) === '2')
+            {
                 $this->_twig->addFilter(new \Twig_Filter($name, $name));
+            }
             else
-                $this->_twig->addFilter($name, new Twig_Filter_Function($name)); 
+            {
+                $this->_twig->addFilter($name, new Twig_Filter_Function($name));
+            }
+
         }
-        
+
         return $this;
     }
 
     public function set($key, $value = NULL, $global = FALSE)
-    {   
+    {
         if (is_array($key))
         {
-            foreach($key as $k => $v) $this->set($k, $v, $global);
+            foreach ($key as $k => $v)
+            {
+                $this->set($k, $v, $global);
+            }
+
         }
         else
         {
@@ -293,7 +295,7 @@ class Twiggy {
             }
             else
             {
-                 $this->_data[$key] = $value;
+                $this->_data[$key] = $value;
             }
         }
 
@@ -301,7 +303,7 @@ class Twiggy {
     }
 
     public function unset_data($key)
-    {  
+    {
         if (array_key_exists($key, $this->_data))
         {
             unset($this->_data[$key]);
@@ -311,7 +313,7 @@ class Twiggy {
     }
 
     public function title()
-    {  
+    {
         if (func_num_args() > 0)
         {
             $args = func_get_args();
@@ -322,7 +324,7 @@ class Twiggy {
     }
 
     public function append()
-    {  
+    {
         $args = func_get_args();
         $title = implode($this->_config['title_separator'], $args);
 
@@ -332,14 +334,14 @@ class Twiggy {
         }
         else
         {
-            $this->set('title', $this->_globals['title'] . $this->_config['title_separator'] . $title, TRUE);
+            $this->set('title', $this->_globals['title'].$this->_config['title_separator'].$title, TRUE);
         }
 
         return $this;
     }
 
     public function prepend()
-    {  
+    {
         $args = func_get_args();
         $title = implode($this->_config['title_separator'], $args);
 
@@ -349,7 +351,7 @@ class Twiggy {
         }
         else
         {
-            $this->set('title', $title . $this->_config['title_separator'] . $this->_globals['title'], TRUE);
+            $this->set('title', $title.$this->_config['title_separator'].$this->_globals['title'], TRUE);
         }
 
         return $this;
@@ -368,14 +370,18 @@ class Twiggy {
     }
 
     public function unset_meta()
-    {   
+    {
         if (func_num_args() > 0)
         {
             $args = func_get_args();
 
             foreach ($args as $arg)
             {
-                if (array_key_exists($arg, $this->_meta)) unset($this->_meta[$arg]);
+                if (array_key_exists($arg, $this->_meta))
+                {
+                    unset($this->_meta[$arg]);
+                }
+
             }
         }
         else
@@ -386,8 +392,8 @@ class Twiggy {
         return $this;
     }
 
-    public function asset($type, $value, $group=NULL, $extra=array())
-    {   
+    public function asset($type, $value, $group = NULL, $extra = array())
+    {
         if ($group)
         {
             $this->_asset[$group][] = array('type' => $type, 'value' => $value, 'extra' => $extra);
@@ -408,7 +414,11 @@ class Twiggy {
 
             foreach ($args as $arg)
             {
-                if (array_key_exists($arg, $this->_asset)) unset($this->_asset[$arg]);
+                if (array_key_exists($arg, $this->_asset))
+                {
+                    unset($this->_asset[$arg]);
+                }
+
             }
         }
         else
@@ -475,16 +485,15 @@ class Twiggy {
 
     public function __get($variable = 'twig')
     {
-        if ($variable == 'twig') 
+        if ($variable === 'twig')
         {
             return $this->_twig;
         }
-
         if (array_key_exists($variable, $this->_globals))
         {
             return $this->_globals[$variable];
         }
-        elseif (array_key_exists($variable, $this->_data))
+        else if (array_key_exists($variable, $this->_data))
         {
             return $this->_data[$variable];
         }
@@ -499,13 +508,13 @@ class Twiggy {
         $this->_rendered = TRUE;
         $this->_twig->setLexer(new Twig_Lexer($this->_twig, $this->_config['delimiters']));
 
-        if (substr(Twig_Environment::VERSION, 0, 1) == '2')
+        if (substr(Twig_Environment::VERSION, 0, 1) === '2')
         {
-            return $this->_twig->loadTemplate($this->_template . $this->_config['template_file_ext']);
+            return $this->_twig->loadTemplate($this->_template.$this->_config['template_file_ext']);
         }
         else
         {
-            return $this->_twig->load($this->_template . $this->_config['template_file_ext']);
+            return $this->_twig->load($this->_template.$this->_config['template_file_ext']);
         }
     }
 
@@ -517,7 +526,7 @@ class Twiggy {
 
             if ( ! empty($this->_module))
             {
-                if (!class_exists('Modules'))
+                if ( ! class_exists('Modules'))
                 {
                     $module_locations = $this->CII->config->item('modules_locations');
                 }
@@ -527,7 +536,7 @@ class Twiggy {
                 }
                 foreach ($module_locations as $loc => $offset)
                 {
-                    if ( ! class_exists('Modules')) 
+                    if ( ! class_exists('Modules'))
                     {
                         if (is_dir($offset.$this->_module.'/'.$this->_config['themes_base_dir'].$theme))
                         {
@@ -545,7 +554,7 @@ class Twiggy {
             }
         }
 
-        $this->_template_locations[] =  $this->_themes_base_dir.$theme;
+        $this->_template_locations[] = $this->_themes_base_dir.$theme;
 
         if (is_object($this->_twig_loader))
         {
@@ -562,14 +571,15 @@ class Twiggy {
         {
             $html .= $this->_meta_to_html($meta);
         }
-        
+
         return $html;
     }
 
     private function _meta_to_html($meta)
     {
-        if (empty($meta['attribute'])){
-           return "<meta name=\"".$meta['name']."\ value=\"".$meta['value']."\">\n";
+        if (empty($meta['attribute']))
+        {
+            return '<meta name="'.$meta['name']."\ value=\"".$meta['value']."\">\n";
         }
         else
         {
@@ -604,7 +614,7 @@ class Twiggy {
         }
 
         $html = '';
-        
+
         foreach ($this->_asset[$group] as $asset)
         {
             $html .= $this->_asset_to_html($asset);
@@ -624,10 +634,10 @@ class Twiggy {
             else
             {
                 return;
-            } 
+            }
         }
 
-        if ($asset['type'] == 'script')
+        if ($asset['type'] === 'script')
         {
             $extra = '';
 
@@ -637,17 +647,14 @@ class Twiggy {
                 {
                     $extra .= ' charset="'.$asset['extra']['charset'].'"';
                 }
-
                 if (isset($asset['extra']['async']))
                 {
                     $extra .= ' async';
                 }
-
                 if (isset($asset['extra']['defer']))
                 {
                     $extra .= ' defer="'.$asset['extra']['defer'].'"';
                 }
-
                 if (isset($asset['extra']['type']))
                 {
                     $extra .= ' type="'.$asset['extra']['type'].'"';
@@ -658,9 +665,9 @@ class Twiggy {
                 }
             }
 
-            return '<script src="'.$asset['value'].'"'.$extra.'></script>'."\n";        
+            return '<script src="'.$asset['value'].'"'.$extra.'></script>'."\n";
         }
-        else if ($asset['type'] == 'link')
+        else if ($asset['type'] === 'link')
         {
             $extra = '';
 
@@ -674,12 +681,10 @@ class Twiggy {
                 {
                     $extra .= ' hreflang="'.$asset['extra']['hreflang'].'"';
                 }
-
                 if (isset($asset['extra']['media']))
                 {
                     $extra .= ' media="'.$asset['extra']['media'].'"';
                 }
-
                 if (isset($asset['extra']['rel']))
                 {
                     $extra .= ' rel="'.$asset['extra']['tyrelpe'].'"';
@@ -688,12 +693,10 @@ class Twiggy {
                 {
                     $extra .= ' rel="stylesheet"';
                 }
-
                 if (isset($asset['extra']['sizes']))
                 {
                     $extra .= ' sizes="'.$asset['extra']['sizes'].'"';
                 }
-
                 if (isset($asset['extra']['type']))
                 {
                     $extra .= ' type="'.$asset['extra']['type'].'"';
@@ -704,7 +707,7 @@ class Twiggy {
                 }
             }
 
-            return '<link href="'.$asset['value'].'"'.$extra.'>'."\n";        
+            return '<link href="'.$asset['value'].'"'.$extra.'>'."\n";
         }
 
         return;
@@ -722,21 +725,18 @@ class Twiggy {
             if (file_exists($file_path))
             {
                 $found = TRUE;
-                require($file_path);
+                require $file_path;
             }
-
             if (file_exists($file_path = APPPATH.'config/'.ENVIRONMENT.'/twiggy.php'))
             {
-                require($file_path);
+                require $file_path;
             }
-            elseif ( ! $found)
+            else if ( ! $found)
             {
                 set_status_header(503);
                 echo 'The configuration file does not exist.';
                 exit(3);
             }
-
-
             if ( ! isset($config) OR ! is_array($config))
             {
                 set_status_header(503);
@@ -744,7 +744,6 @@ class Twiggy {
                 exit(3);
             }
         }
-
         foreach ($replace as $key => $val)
         {
             $config['twiggy'][$key] = $val;
