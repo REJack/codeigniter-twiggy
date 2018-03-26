@@ -1,5 +1,5 @@
 
-@import url(http://reset5.googlecode.com/hg/reset.min.css);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css);
 
 /************************************************************************
 * Basics
@@ -10,7 +10,7 @@ body
 	background: #f2f0e7;
 	color: #503f38;
 	font-family: Arial;
-	font-size: 1.2em;
+	font-size: 1.1em;
 }
 
 h1, h2, h3 { font-family: 'Comfortaa'; font-weight: 300; text-transform: uppercase; }
