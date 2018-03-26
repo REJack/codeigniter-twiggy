@@ -30,7 +30,7 @@
 
         <div class="description">
 
-          <p>twig template engine implementation for PHP framework called <a href="http://codeigniter.com">CodeIgniter</a></p>
+          <p>twig template engine implementation for PHP framework called <a href="http://codeigniter.com" target="_blank">CodeIgniter</a></p>
 
         </div>
 
@@ -38,13 +38,13 @@
 
         <br><br>
 
-        <a href="https://github.com/REJack/codeigniter-twiggy/releases" class="block-link">GitHub releases</a>
+        <a href="https://github.com/REJack/codeigniter-twiggy/releases" class="block-link" target="_blank">GitHub releases</a>
 
-        <a href="http://twig.sensiolabs.org" class="block-link">Official Twig Site</a>
+        <a href="http://twig.sensiolabs.org" class="block-link" target="_blank">Official Twig Site</a>
 
         <br><br><br>
 
-        <p>Current version: <span class="tagged">0.9.1</span></p>
+        <p>Current version: <span class="tagged">0.9.8</span></p>
 
       </div> <!-- #introduction END -->
 
@@ -55,9 +55,8 @@
         <ul>
 
           <li><a href="#overview">Overview</a></li>
-          <li><a href="#installation">Installation &amp; Requirements</a></li>
-          <li><a href="#usage">Basic Usage</a></li>
-          <li><a href="#examples">Examples &amp; Best Practices</a></li>
+          <li><a href="#requirements">Requirements</a></li>
+          <li><a href="#documentation">Documentation</a></li>
           <li><a href="#about">About</a></li>
 
         </ul>
@@ -78,430 +77,24 @@
 
   </section>
 
-  <section id="installation" class="container centered spaced">
+  <section id="documentation" class="container centered spaced">
 
-    <h1>Installation &amp; Requirements</h1>
+    <h1>Requirements</h1>
 
     <p>To make sure Twiggy works correctly, you need to have:</p>
 
     <ul>
-
-      <li>PHP 5.4+</li>
-      <li>CodeIgniter 3.0</li>
-
+      <li>PHP 5.4+ (7.0 recommend)</li>
+      <li>CodeIgniter 3.x</li>
+      <li>Twig 1.x or 2.x</li>
     </ul>
-
-    <p>Note that you don’t need to install Twig yourself, it comes with Twiggy.</p>
-
-    <h2>How to install</h2>
-
-    <p>The installation is a piece of cake!</p>
-    <p>All you need to do is to download a GitHub release and place the files in your CodeIgniter application folder.</p>
-    <p>Then add twiggy in the autoload library array. Like this: </p>
-    <pre>$autoload['libraries'] = array('twiggy');</pre>
-
   </section>
 
-  <section id="usage" class="container centered spaced">
+  <section id="documentation" class="container centered spaced">
 
-    <h1>Basic Usage</h1>
+    <h1>Documentation</h1>
 
-    <p>Here we'll take a look at how to use Twiggy for the firs time.</p>
-
-    <h2>1. Load it</h2>
-
-    <pre>$this->load->spark('twiggy/x.x.x');</pre>
-
-    <br>
-
-    <h2>2. Set up dir structure</h2>
-
-    <ol>
-
-      <li>
-        <p>Create a directory structure:</p>
-
-        <pre>+-{APPPATH}/
-| +-themes/
-| | +-default/
-| | | +-_layouts/</pre>
-
-        <br>
-
-        <p>NOTE: <span class="tagged">{APPPATH}</span> is the folder where all your controllers, models and other neat stuff is placed. By default that folder is called application.</p>
-      
-      </li>
-
-      <li>
-
-        <p>Create a default layout <span class="tagged">index.html.twig</span> and place it in _layouts folder:</p>
-
-        <pre>&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-    &lt;head&gt;
-        &lt;meta charset="utf-8"&gt;
-        &lt;!--[if lt IE 9]&gt;
-        &lt;script src="http://html5shim.googlecode.com/svn/trunk/html5.js"&gt;&lt;/script&gt;
-        &lt;![endif]--&gt;
-        &lt;title&gt;Default layout&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-
-        {% block content %}
-
-        {% endblock %}
-
-    &lt;/body&gt;
-&lt;/html&gt;</pre>
-
-      </li>
-
-      <li>
-
-        <p>Create a default template file <span class="tagged">index.html.twig</span> at the root of default theme folder:</p>
-
-        <pre>{% extends _layout %}
-
-{% block content %}
-
-    Default template file.
-
-{% endblock %}</pre>
-
-      </li>
-
-      <li>
-
-        <p>You should end up with a structure like this:</p>
-
-        <pre>+-{APPPATH}/
-| +-themes/
-| | +-default/
-| | | +-_layouts/
-| | | | +-index.hml.twig
-| | | +-index.html.twig</pre>
-
-        <br>
-
-      </li>
-
-    </ol>
-
-    <h2>3. Display the template</h2>
-
-    <pre>$this->twiggy->display();</pre>
-
-    <br>
-
-    <h2>4. What's next?</h2>
-
-    <p>In the example above we only displayed the default template and layout. Obviously, you can create as many layouts and templates as you want. For example, create a new template file <span class="tagged">welcome.html.twig</span> and load it before sending the output to the browser.</p>
-
-    <pre>// Whoah, methoding chaining FTW!
-$this->twiggy->template('welcome')->display();</pre>
-
-    <br>
-
-    <p>Notice that you only need to specify the name of the template (without the extension <span class="tagged">*.html.twig</span>).</p>
-
-  </section>
-
-  <section id="examples" class="container centered spaced">
-
-    <h1>Examples &amp; Best Practices</h1>
-
-    <p>There are a lot of ways you can use Twiggy and nobody is going to beat you with a bat if you do it your own way. On the other hand, knowing how to efficiently use this library to your advantage can't hurt, right? Okay then, here we go!</p>
-
-    <h2>Data variables</h2>
-
-    <p>Twiggy distinguishes two types of data variables: standard (local) and global. The first one is pretty obvious -- these variables are only available inside the loaded template.
-      Global variables, on the other hand, are accessible from anywhere within Twig template files. They're extremely useful when you need to have access to some data no matter which template file you load, for example: authenticated user information such as username, avatar etc. 
-      Standard variables are good for page-specific data. For example, you want to iterate through an array of tracks for a specific music album. So let's take a look at how to set and access data variables.</p>
-
-    <h3>Synopsis</h3>
-
-    <pre>$this->twiggy->set($key, $value, $global = FALSE)</pre>
-
-    <h3>Standard variables</h3>
-
-    <pre>$this->twiggy->set('tracks', array('Afterlife', 'The Original', 'The War Inside'));</pre>
-
-    <h3>Global variables</h3>
-
-    <pre>$this->twiggy->set('user', array('username' => 'edmundas', 'email' => 'my.name@email.com'), TRUE);</pre>
-
-    <hr>
-
-    <p>You can also set multiple variables at once.</p>
-
-    <pre>$data = array();
-
-// Presumably you'll want to get these from the database through the model
-$data['albums'] = array('Nothing Is Sound', 'Oh! Gravity.', 'Vice Verses');
-$data['tracks'] = array('Afterlife', 'The Original', 'The War Inside');
-
-$this->twiggy->set($data);</pre>
-
-    <p>In the example above those would be standard variables. In order to set multiple <span class="tagged">global</span> variables, just leave the second parameter empty (NULL) and set the third parameter as TRUE.</p>
-
-    <pre>$data = array();
-
-// Presumably you'll want to get these from the database through the model
-$data['albums'] = array('Nothing Is Sound', 'Oh! Gravity.', 'Vice Verses');
-$data['tracks'] = array('Afterlife', 'The Original', 'The War Inside');
-
-// For some weird reason these need to be global
-$this->twiggy->set($data, NULL, TRUE);</pre>
-
-    <h3>Accessing data</h3>
-
-    <p>We'll not cover how to use variables inside templates as everything is well documented at the <a href="http://twig.sensiolabs.org/">official twig website</a>. However, sometimes you will need to get the data inside the controller, model or even standard CodeIgniter view files.</p>
-
-    <pre>$albums = $this->twiggy->albums</pre>
-
-    <p>Here we see a bit of PHP 5 magic with <span class="tagged">__get()</span> method to get data variables.</p>
-
-    <h3>Unsetting data</h3>
-
-    <pre>$this->twiggy->unset_data('albums');</pre>
-
-
-    <h2>Handling output</h2>
-
-    <p>You can echo the output by calling <span class="tagged">$this->twiggy->display()</span> at the end of your controller. However, there's another method which does not print the ouput but rather returns it.</p>
-
-    <pre>
-// Render (compile) the output but don't display it
-$output = $this->twiggy->render();</pre>
-
-    <p>This gives you the possibility of sending the output to the <span class="tagged">Output</span> class (one of CodeIgniter's system classes).</p>
-
-    <pre>// Render (compile) the output but don't display it
-$output = $this->twiggy->render();
-
-// Set output
-$this->output->set_output($output);</pre>
-
-    <h2>Method chaining</h2>
-
-    <p>Instead of calling each method on a new line, why don't we take advantage of PHP 5 and use method chaining?</p>
-
-    <pre>$this->twiggy->set('username', 'edmundas')->template('account')->display();</pre>
-
-    <p>This is the same as writting:</p>
-
-    <pre>$this->twiggy->set('username', 'edmundas');
-$this->twiggy->template('account');
-$this->twiggy->display();</pre>
-
-    <h2>Functions &amp; Filters</h2>
-
-    <p>By default, functions are not accessible from the template files in Twig. So, for example, calling phpversion() wouldn't work:</p>
-
-    <pre>{% extends _layout %}
-
-{% block content %}
-
-    Hello, I'm a template. I want you to meet PHP {{ phpversion() }}.
-
-{% endblock %}</pre>
-
-    <p>This provides you with a delicate way of dealing with template files where you want to limit exposure of potentially unsafe function calls.
-      Therefore, in order to use functions you must register them within the Twig environment.</p>
-
-    <pre>$this->twiggy->register_function('phpversion');</pre>
-
-    <!--<p>To register multiple functions, pass in an array of function names.</p>
-
-    <pre>$this->twiggy->register_function(array('phpversion', 'some_function'));</pre>-->
-
-    <h3>Filters</h3>
-
-    <p>Filters are essentially just plain ol' functions, except Twig expects these functions to do something with given data and return it.
-      For example, you want to have a filter that takes a string as a parameter and returns the string with a prefix attached to it.</p>
-
-    <pre>function prefix_it($input, $prefix = 'prefix_')
-{
-    return $prefix . $input;
-}</pre>
-
-    <p>As with functions, filters must be registered within the Twig environment.</p>
-
-    <pre>$this->twiggy->register_filter('prefix_it');</pre>
-
-    <p>Finally, use the filter in the template.</p>
-
-    <pre>The table name is {{ "users"|prefix_it('cms_') }}.</pre>
-
-    <p>In the output you should get:</p>
-
-    <pre>The table name is cms_users.</pre>
-
-    <h3>Auto-register functions &amp; filters</h3>
-
-    <p>Registering functions and filters can get somewhat tedious when you have a lot of them and they get used frequently. 
-      Luckily, Twiggy has it covered. In the configuration file you should see two option keys: <span class="tagged">register_functions</span> and <span class="tagged">register_filters</span>.
-      Yup, this is the place to put your oftenly used functions and filters!</p>
-
-    <pre>$config['twiggy']['register_functions'] = array
-(
-    // Some functions from the url_helper.php
-    'site_url', 'base_url', 'uri_string', 'anchor', 'url_title'
-);
-
-$config['twiggy']['register_filters'] = array
-(
-    // Functions (filters) from the inflector_helper.php
-    'singular', 'plural', 'camelize', 'underscore', 'humanize'
-);</pre>
-
-    <p>Of course, keep in mind that these functions must be defined (meaning that if you use functions from helpers, make sure these helpers are loaded).</p>
-
-    <h2>Accessing Twig instance</h2>
-
-    <p>Twiggy exposes only the essential (and most frequently used) Twig functionality. However, there may be times when you will need to do something tricky.
-      Fear not, you have access to the twig instance!</p>
-
-    <pre>print_r($this->twiggy->twig);</pre>
-
-    <p>Twig allows you to not only register functions but also register them with different names. This is not possible in the current version of Twiggy through <span class="tagged">$this->twiggy->register_function()</span>.
-      But since we have access to the twig instance, we can call a method that will do what we want.</p>
-
-    <pre>$this->twiggy->twig->addFunction('my_phpversion', new Twig_Function_Function('phpversion'));</pre>
-
-    <p>In the template files we'll be able to call our function as such:</p>
-
-    <pre>Turns out I can have my own function name! Long live PHP {{ my_phpversion() }}!</pre>
-
-    <p>We won't go through advanced Twig features here but you can always check the <a href="http://twig.sensiolabs.org/documentation">official documentation</a> for reference.</p>
-
-    <p><span class="tagged warning">WARNING:</span> twig instance is accessed with the help of <span class="tagged">__get()</span> magic PHP method. But, as you know, it
-      is also used for accessing variables. Therefore, do not set a template variable with the name 'twig'. Doing so won't overwrite the twig instance but you will not be
-      able to access it in your PHP code.</p>
-
-    <h2>Dealing with the title tag</h2>
-
-    <p>While you can have, let's say, a global variable to store the value of the title tag, it might become tedious setting that value for each page while keeping track of which section of the website you are in (in regards to previous/parent page).</p>
-
-    <p>Luckily, Twiggy has a few methods to make your life easier.</p>
-
-    <h3>Before digging deeper</h3>
-
-    <p>There is no voodoo mojo stuff here. You are not forced to use this extra functionality. Essentially all that it does is it sets a global variable named <span class="tagged">title</span> based on how you use these additional methods. This variable, like any other, can be used inside twig templates.</p>
-
-    <pre>&lt;title&gt;{{ title }}&lt;/title&gt;</pre>
-
-    <h3>Set the title</h3>
-
-    <pre>$this->twiggy->title('Twiggy is awesome');</pre>
-
-    <p>With this method you can set the <b>default</b> title in, for example, <span class="tagged">MY_Controller.php</span>.</p>
-
-    <h3>Prepend and append data to the title</h3>
-
-    <p>Depending on your SEO strategy, convenience or other factors, you can prepend or append data to the existing title string.</p>
-
-    <pre>$this->twiggy->title()->prepend('Home');</pre>
-
-    <p>This will produce:</p>
-
-    <pre>Home | Twiggy is awesome</pre>
-
-    <p>while</p>
-
-    <pre>$this->twiggy->title()->append('Home');</pre>
-
-    <p>will produce:</p>
-
-    <pre>Twiggy is awesome | Home</pre>
-
-    <p>Note that when you want to prepend or append data to the <b>existing</b> title string, leave the title method empty (without params). Also, you may not like the title separator. It can be changed with the <span class="tagged">set_title_separator()</span> method.</p>
-
-    <pre>$this->twiggy->title('My personal blog')
-             ->prepend('Posts')
-             ->set_title_separator(' - ')
-             ->prepend('First blog entry');</pre>
-
-    <p>The code above will produce:</p>
-
-    <pre>First blog entry - Posts | My personal blog</pre>
-
-    <p>As you can see, method chaining works here as well.</p>
-
-    <p>One last trick to remember is that <span class="tagged">title()</span>, <span class="tagged">prepend()</span> and <span class="tagged">append()</span> methods accept multiple parameters.</p>
-
-    <pre>// By default passing in multilple params will invoke append()
-$this->twiggy->title('Control Panel', 'Login');</pre>
-
-    <p>Output:</p>
-
-    <pre>Control Panel | Login</pre>
-
-    <p>The code above is equivalent to this:</p>
-
-    <pre>$this->twiggy->title('Control Panel')->append('Login');</pre>
-
-    <h2>Meta data (meta tags)</h2>
-
-    <p>Much like with the title tag, Twiggy helps you by eliminating the need to bother with meta tags "the hard way".</p>
-
-    <h3>Synopsis</h3>
-
-    <pre>$this->twiggy->meta($name, $value, $attribute = 'name');</pre>
-
-    <p>You will most likely want to set meta keywords and description. We won't get into whether having these tags in your code matter anymore in regards to search engines, that's not our goal!</p>
-
-    <pre>$this->twiggy->meta('keywords', 'twiggy, twig, template, layout, codeigniter');
-$this->twiggy->meta('description', 'Twiggy is an implementation of Twig template engine for CI');</pre>
-
-    <p>Then in your template file (probably the layout file) you can use this global variable named <span class="tagged">meta</span>.</p>
-
-    <pre>&lt;html&gt;
-  &lt;head&gt;
-    {{ meta }}
-  ...</pre>
-
-    <p>Twiggy will automatically compile the data into HTML code when <span class="tagged">render()</span> or <span class="tagged">display()</span> method is called.</p>
-
-    <pre>&lt;meta name="keywords" value="twiggy, twig, template, layout, codeigniter"&gt;
-&lt;meta name="description" value="Twiggy is an implementation of Twig template engine for CI"&gt;</pre>
-
-    <h3>Getting metadata in PHP code</h3>
-
-    <p>If you for whatever reason need to get metadata inside, for example, controller you can call <span class="tagged">get_meta()</span> method.</p>
-
-    <pre>get_meta($name = '', $compile = FALSE)</pre>
-
-    <p>As the code suggests, you can either get the raw data (an array) or compiled HTML code.</p>
-
-    <pre>$this->twiggy->get_meta('keywords');</pre>
-
-    <p>The code above will return "keywords" array.</p>
-
-    <pre>$this->twiggy->get_meta('keywords', TRUE);</pre>
-
-    <p>Here you will get a string (HTML code) instead.</p>
-
-    <pre>$this->twiggy->get_meta(NULL, TRUE);</pre>
-
-    <p>In this case you will get <b>ALL</b> meta data compiled into HTML code since the first parameter is NULL (empty).</p>
-
-    <h3>Unset metadata</h3>
-
-    <p>Naturally you can unset meta data with <span class="tagged">unset_meta()</span>.</p>
-
-    <pre>// unset only the keywords meta tag
-$this->twiggy->unset_meta('keywords');
-
-// unset all meta tags
-$this->twiggy->unset_meta();
-
-// unset keywords and description
-$this->twiggy->unset_meta('keywords', 'description');</pre>
-
-    <h2>Final Notes</h2>
-
-    <p>Make sure to check the configuration file to see which options you can change to suit your needs.</p>
+    <p>You can read the Documentation online or download the whole Documentation at <a href="https://www.gitbook.com/book/rejack/codeigniter-twiggy/" target="_blank">GitBook.com</a></p>
 
   </section>
 
@@ -509,8 +102,8 @@ $this->twiggy->unset_meta('keywords', 'description');</pre>
 
     <h1>About</h1>
     <p>The author of this Twiggy Fork is REJack.</p>
-    <p>The orignal author of Twiggy is <a href="http://edmundask.lt">Edmundas Kondrašovas</a>. <br /> However, he does not claim every piece of code as his own. </p>
-    <p>Credit also goes to the authors of <a href="http://twig-project.org">Twig</a>.</p>
+    <p>The orignal author of Twiggy is <a href="http://edmundask.lt" target="_blank">Edmundas Kondrašovas</a>. <br /> However, he does not claim every piece of code as his own. </p>
+    <p>Credit also goes to the authors of <a href="http://twig-project.org" target="_blank">Twig</a>.</p>
 
   </section>
 
